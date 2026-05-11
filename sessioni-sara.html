@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sessioni Individuali — Sara Autunnale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #05070a;
+            --panel: rgba(255, 255, 255, 0.04);
+            --line: rgba(255, 255, 255, 0.12);
+            --accent: #7dd3fc;
+            --accent-dim: rgba(125, 211, 252, 0.1);
+            --text: #f4f1ea;
+            --dim: rgba(244, 241, 234, 0.45);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        .universe {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.08), transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle var(--d) infinite ease-in-out;
+        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.15s; }
+        .reveal-delay-2 { transition-delay: 0.3s; }
+        .reveal-delay-3 { transition-delay: 0.45s; }
+
+        section {
+            position: relative;
+            z-index: 1;
+            padding: clamp(80px, 12vh, 140px) clamp(24px, 8vw, 120px);
+        }
+
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 10;
+            padding: 24px clamp(24px, 8vw, 120px);
+        }
+
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0.5;
+            text-decoration: none;
+            color: var(--text);
+            transition: opacity 0.3s;
+        }
+        .nav-logo:hover { opacity: 1; }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-label {
+            font-size: 0.65rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 36px;
+            opacity: 0;
+            animation: fadeUp 1.2s 0.3s forwards;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 300;
+            line-height: 1.05;
+            letter-spacing: 0.05em;
+            max-width: 900px;
+            opacity: 0;
+            animation: fadeUp 1.4s 0.6s forwards;
+        }
+
+        .hero h1 em { font-style: italic; color: var(--accent); }
+
+        .hero-sub {
+            margin-top: 40px;
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
+            color: var(--dim);
+            max-width: 520px;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeUp 1.4s 1s forwards;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0.4;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes fadeUp { to { opacity: 1; transform: none; } }
+        @keyframes bounce { 0%,20%,50%,80%,100% {transform:translateY(0);} 40% {transform:translateY(-10px);} 60% {transform:translateY(-5px);} }
+
+        .divider { width: 100%; height: 1px; background: var(--line); position: relative; z-index: 1; }
+
+        .chi-sono { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+
+        .section-label {
+            font-size: 0.6rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 28px;
+            display: block;
+        }
+
+        .chi-sono h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-weight: 300;
+            line-height: 1.1;
+        }
+
+        .chi-sono-text p { font-size: 1.05rem; line-height: 1.9; color: var(--dim); margin-bottom: 24px; }
+        .chi-sono-text p strong { color: var(--text); font-weight: 400; }
+
+        .metodo-intro { max-width: 700px; margin: 0 auto 80px; text-align: center; }
+        .metodo-intro h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 300; margin-bottom: 20px; }
+        .metodo-intro p { color: var(--dim); font-size: 1.05rem; line-height: 1.8; }
+
+        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2px; max-width: 1100px; margin: 0 auto; }
+
+        .step { padding: 48px 36px; border: 1px solid var(--line); transition: background 0.4s, border-color 0.4s; }
+        .step:hover { background: var(--accent-dim); border-color: var(--accent); }
+
+        .step-num { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300; color: var(--line); line-height: 1; margin-bottom: 20px; transition: color 0.4s; }
+        .step:hover .step-num { color: var(--accent); }
+        .step h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 12px; }
+        .step p { font-size: 0.9rem; line-height: 1.7; color: var(--dim); }
+
+        .quote-section { text-align: center; padding-top: 100px; padding-bottom: 100px; }
+        .quote-section blockquote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 300; line-height: 1.4; max-width: 800px; margin: 0 auto; }
+        .quote-section blockquote::before { content: '"'; display: block; font-size: 6rem; line-height: 0.5; color: var(--accent); opacity: 0.4; margin-bottom: 20px; }
+
+        .testimonianze h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 300; margin-bottom: 60px; text-align: center; }
+        .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; }
+
+        .testi-card { border: 1px solid var(--line); padding: 40px 36px; background: var(--panel); transition: border-color 0.4s; }
+        .testi-card:hover { border-color: var(--accent); }
+        .testi-card p { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.15rem; line-height: 1.7; color: var(--dim); margin-bottom: 24px; }
+        .testi-card cite { font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); font-style: normal; }
+
+        .contatto { text-align: center; max-width: 600px; margin: 0 auto; }
+        .contatto h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 300; margin-bottom: 24px; }
+        .contatto p { color: var(--dim); font-size: 1.05rem; line-height: 1.8; margin-bottom: 48px; }
+
+        .btn-contact {
+            display: inline-block; padding: 18px 52px;
+            border: 1px solid var(--accent); color: var(--accent);
+            text-decoration: none; font-size: 0.7rem; letter-spacing: 5px;
+            text-transform: uppercase; transition: all 0.4s; background: transparent;
+        }
+        .btn-contact:hover { background: var(--accent); color: var(--bg); letter-spacing: 7px; }
+
+        footer { position: relative; z-index: 1; padding: 40px clamp(24px, 8vw, 120px); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--dim); }
+
+        @media (max-width: 768px) { .chi-sono { grid-template-columns: 1fr; gap: 48px; } }
+        @media (max-width: 600px) {
+            section { padding: 64px 20px; }
+            .hero h1 { font-size: 2.6rem; }
+            .steps { grid-template-columns: 1fr; }
+            .step { padding: 36px 24px; }
+            .testi-grid { grid-template-columns: 1fr; }
+            .testi-card { padding: 32px 20px; }
+            .quote-section blockquote { font-size: 1.4rem; }
+            footer { flex-direction: column; gap: 12px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="universe" id="star-field"></div>
+
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">← Codice Vivente</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-label">Sara Autunnale</div>
+        <h1>Riesco a vedere<br>cosa si cela<br><em>dietro alle parole.</em></h1>
+        <p class="hero-sub">Sessioni individuali per sciogliere i nodi profondi — emotivi, mentali, fisici. Chiudo gli occhi e vedo.</p>
+        <div class="scroll-indicator">Scendi nella trama</div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section>
+        <div class="chi-sono">
+            <div class="reveal">
+                <span class="section-label">Chi sono</span>
+                <h2>Una facoltà,<br>non un metodo.</h2>
+            </div>
+            <div class="chi-sono-text reveal reveal-delay-1">
+                <p>Quando una persona mi descrive un problema — un blocco, un loop che si ripete, un malessere che non passa — faccio domande precise, fino a trovare i punti nodali.</p>
+                <p>Poi <strong>chiudo gli occhi, e vedo.</strong></p>
+                <p>Vedo immagini. Sento emozioni. Arrivo direttamente a quello che è successo — spesso molto indietro nel tempo, spesso in un momento che la persona stessa ricorda a malapena.</p>
+                <p>Quando lo descrivo, qualcosa si riconosce. <strong>E nel riconoscimento, qualcosa si scioglie.</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section>
+        <div class="metodo-intro reveal">
+            <span class="section-label">Come funziona</span>
+            <h2>La sessione</h2>
+            <p>Non faccio terapia. Non faccio coaching. Quello che faccio non ha ancora una categoria. Ha un risultato.</p>
+        </div>
+        <div class="steps">
+            <div class="step reveal">
+                <div class="step-num">01</div>
+                <h3>Il racconto</h3>
+                <p>Mi descrivi il problema, il blocco, il loop. Dove sei adesso e cosa senti.</p>
+            </div>
+            <div class="step reveal reveal-delay-1">
+                <div class="step-num">02</div>
+                <h3>I nodi</h3>
+                <p>Con domande precise arrivo ai punti nodali — non ai sintomi, alla radice.</p>
+            </div>
+            <div class="step reveal reveal-delay-2">
+                <div class="step-num">03</div>
+                <h3>La visione</h3>
+                <p>Chiudo gli occhi. Arrivano immagini ed emozioni — connesse direttamente a te.</p>
+            </div>
+            <div class="step reveal reveal-delay-3">
+                <div class="step-num">04</div>
+                <h3>Il riconoscimento</h3>
+                <p>Descrivo quello che vedo. Inizia il dialogo. Qualcosa si scioglie.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="quote-section">
+        <blockquote class="reveal">
+            Ho studiato psicologia, ipnosi, PNL, coaching, crescita personale — non ho mai sperimentato risultati così veloci nell'arco di un solo incontro.
+        </blockquote>
+        <p style="margin-top:40px; font-size:0.65rem; letter-spacing:4px; text-transform:uppercase; color:var(--accent);" class="reveal reveal-delay-1">— Riccardo</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="testimonianze">
+        <h2 class="reveal">Quello che dicono.</h2>
+        <div class="testi-grid">
+            <div class="testi-card reveal">
+                <p>Mi ha aiutato in un tempo brevissimo a superare blocchi fisici nascosti da blocchi emotivi più profondi.</p>
+                <cite>Patrizia, 2016</cite>
+            </div>
+            <div class="testi-card reveal reveal-delay-1">
+                <p>La seduta mi ha permesso di sciogliere un nodo e lasciar andare qualcosa per permettermi di aprirmi al cambiamento.</p>
+                <cite>Denise, 2016</cite>
+            </div>
+            <div class="testi-card reveal reveal-delay-2">
+                <p>Ho affrontato blocchi emotivi profondi e liberato da sofferenze di anni. Ringrazio infinitamente per questa opportunità.</p>
+                <cite>Riccardo</cite>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section>
+        <div class="contatto reveal">
+            <span class="section-label">Inizia</span>
+            <h2>Prenota una sessione</h2>
+            <p>Le sessioni durano una o due ore. Si svolgono online o in presenza. I risultati li misuriamo insieme — prima e dopo.</p>
+            <a href="mailto:sara.autunnale@gmail.com" class="btn-contact">Scrivimi</a>
+        </div>
+    </section>
+
+    <footer>
+        <span>Sara Autunnale</span>
+        <span>© 2026</span>
+    </footer>
+
+    <script>
+        const starField = document.getElementById('star-field');
+        for (let i = 0; i < 70; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = star.style.height = Math.random() * 2 + 'px';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.setProperty('--d', (Math.random() * 4 + 2) + 's');
+            starField.appendChild(star);
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); observer.unobserve(e.target); } });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La tua esperienza — Sara Autunnale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #05070a;
+            --panel: rgba(255, 255, 255, 0.04);
+            --line: rgba(255, 255, 255, 0.12);
+            --accent: #7dd3fc;
+            --accent-dim: rgba(125, 211, 252, 0.1);
+            --text: #f4f1ea;
+            --dim: rgba(244, 241, 234, 0.45);
+            --error: #e07070;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .universe {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.08), transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle var(--d) infinite ease-in-out;
+        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 10;
+            padding: 24px clamp(24px, 8vw, 120px);
+        }
+
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0.5;
+            text-decoration: none;
+            color: var(--text);
+            transition: opacity 0.3s;
+        }
+        .nav-logo:hover { opacity: 1; }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: clamp(100px, 14vh, 160px) clamp(24px, 6vw, 60px) clamp(60px, 10vh, 100px);
+        }
+
+        .page-label {
+            font-size: 0.6rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 24px;
+            display: block;
+            opacity: 0;
+            animation: fadeUp 1s 0.2s forwards;
+        }
+
+        .page-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.4rem, 6vw, 4rem);
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeUp 1s 0.4s forwards;
+        }
+
+        .page-intro {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--dim);
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: fadeUp 1s 0.6s forwards;
+        }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+        .divider { width: 40px; height: 1px; background: var(--accent); opacity: 0.4; margin: 48px 0; }
+
+        .question-block {
+            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .question-block.visible { opacity: 1; transform: none; }
+
+        .question-num {
+            font-size: 0.6rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .question-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 300;
+            line-height: 1.3;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .question-hint {
+            font-size: 0.82rem;
+            color: var(--dim);
+            margin-bottom: 16px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        textarea, input[type="text"], input[type="email"] {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--line);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 1rem;
+            padding: 12px 0;
+            outline: none;
+            transition: border-color 0.3s;
+            resize: none;
+        }
+
+        textarea { min-height: 90px; line-height: 1.7; }
+        textarea:focus, input:focus { border-bottom-color: var(--accent); }
+        textarea::placeholder, input::placeholder { color: rgba(244, 241, 234, 0.2); font-style: italic; }
+
+        .char-count { font-size: 0.65rem; color: var(--dim); text-align: right; margin-top: 6px; }
+
+        .scale-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+
+        .scale-btn {
+            width: 44px; height: 44px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--dim);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        .scale-btn:hover { border-color: var(--accent); color: var(--text); }
+        .scale-btn.selected { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+        .scale-labels { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.65rem; color: var(--dim); }
+
+        .consent-wrap {
+            display: flex; align-items: flex-start; gap: 16px; margin-bottom: 48px;
+            opacity: 0; transform: translateY(20px); transition: opacity 1s ease, transform 1s ease;
+        }
+        .consent-wrap.visible { opacity: 1; transform: none; }
+
+        .consent-wrap input[type="checkbox"] {
+            width: 18px; height: 18px; min-width: 18px;
+            border: 1px solid var(--line); background: transparent;
+            accent-color: var(--accent); margin-top: 2px; cursor: pointer;
+        }
+        .consent-wrap label { font-size: 0.85rem; color: var(--dim); line-height: 1.6; cursor: pointer; }
+
+        .submit-wrap { opacity: 0; transform: translateY(20px); transition: opacity 1s ease, transform 1s ease; }
+        .submit-wrap.visible { opacity: 1; transform: none; }
+
+        .btn-submit {
+            display: inline-block; padding: 18px 52px;
+            border: 1px solid var(--accent); color: var(--accent);
+            background: transparent; font-family: 'Inter', sans-serif;
+            font-weight: 300; font-size: 0.7rem; letter-spacing: 5px;
+            text-transform: uppercase; cursor: pointer; transition: all 0.4s;
+        }
+        .btn-submit:hover:not(:disabled) { background: var(--accent); color: var(--bg); letter-spacing: 7px; }
+        .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .field-error { font-size: 0.75rem; color: var(--error); margin-top: 6px; display: none; }
+        .field-error.show { display: block; }
+
+        .success-screen { display: none; text-align: center; padding: 80px 0; }
+        .success-screen.show { display: block; }
+        .success-icon { font-size: 3rem; margin-bottom: 32px; opacity: 0.6; }
+        .success-screen h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 300; margin-bottom: 20px; }
+        .success-screen p { color: var(--dim); font-size: 1.05rem; line-height: 1.8; }
+
+        footer { position: relative; z-index: 1; text-align: center; padding: 40px 24px; font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--dim); border-top: 1px solid var(--line); }
+
+        @media (max-width: 500px) {
+            .scale-btn { width: 36px; height: 36px; font-size: 0.95rem; }
+            .page-title { font-size: 2rem; }
+            .question-label { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="universe" id="star-field"></div>
+
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">← Codice Vivente</a>
+    </nav>
+
+    <div class="wrapper">
+
+        <span class="page-label">Sara Autunnale</span>
+        <h1 class="page-title">La tua esperienza<br>con le tue parole.</h1>
+        <p class="page-intro">Non ti chiedo un voto o un complimento. Ti chiedo di raccontare — con onestà — quello che hai vissuto. Poche domande, nessuna risposta giusta.</p>
+
+        <div class="divider"></div>
+
+        <form id="review-form" novalidate>
+
+            <div class="question-block">
+                <span class="question-num">Prima di iniziare</span>
+                <label class="question-label" for="nome">Come ti chiami?</label>
+                <p class="question-hint">Anche solo il nome. Verrà usato solo con il tuo consenso.</p>
+                <input type="text" id="nome" name="nome" placeholder="Il tuo nome…" maxlength="80">
+            </div>
+
+            <div class="question-block">
+                <span class="question-num">01</span>
+                <label class="question-label" for="q1">Prima di venire da me, come descriveresti quello che stavi vivendo?</label>
+                <p class="question-hint">Usa le tue parole — non importa se è difficile da spiegare. Anche una sola frase va benissimo.</p>
+                <textarea id="q1" name="q1" placeholder="Stavo vivendo…" maxlength="600"></textarea>
+                <div class="char-count"><span id="c1">0</span> / 600</div>
+                <div class="field-error" id="e1">Raccontaci qualcosa, anche poco.</div>
+            </div>
+
+            <div class="question-block">
+                <span class="question-num">02</span>
+                <label class="question-label" for="q2">C'è stato un momento durante la sessione in cui hai sentito qualcosa cambiare?</label>
+                <p class="question-hint">Anche una sensazione sottile, un'immagine, una parola che ti ha colpito.</p>
+                <textarea id="q2" name="q2" placeholder="Ho sentito…" maxlength="600"></textarea>
+                <div class="char-count"><span id="c2">0</span> / 600</div>
+                <div class="field-error" id="e2">Raccontaci qualcosa, anche poco.</div>
+            </div>
+
+            <div class="question-block">
+                <span class="question-num">03</span>
+                <label class="question-label" for="q3">Dopo la sessione, cosa è cambiato — anche in piccolo?</label>
+                <p class="question-hint">Qualcosa di concreto: come ti senti, come dormi, come reagisci, cosa pensi diversamente.</p>
+                <textarea id="q3" name="q3" placeholder="Adesso…" maxlength="600"></textarea>
+                <div class="char-count"><span id="c3">0</span> / 600</div>
+                <div class="field-error" id="e3">Raccontaci qualcosa, anche poco.</div>
+            </div>
+
+            <div class="question-block">
+                <span class="question-num">04</span>
+                <span class="question-label">Quanto pesava il problema? (0 = nulla, 10 = massimo)</span>
+                <p class="question-hint">Prima e dopo la sessione.</p>
+                <p style="font-size:0.8rem; color:var(--dim); margin: 16px 0 8px;">Prima</p>
+                <div class="scale-wrap" id="scale-prima"></div>
+                <p style="font-size:0.8rem; color:var(--dim); margin: 20px 0 8px;">Dopo</p>
+                <div class="scale-wrap" id="scale-dopo"></div>
+                <div class="scale-labels"><span>nessun peso</span><span>peso massimo</span></div>
+                <div class="field-error" id="e4">Seleziona un valore per entrambe le scale.</div>
+            </div>
+
+            <div class="question-block">
+                <span class="question-num">05</span>
+                <label class="question-label" for="q5">Se dovessi spiegare a qualcuno cos'è una sessione con Sara, cosa diresti?</label>
+                <p class="question-hint">Immagina di parlare con un amico che non sa nulla di questo lavoro.</p>
+                <textarea id="q5" name="q5" placeholder="È come…" maxlength="400"></textarea>
+                <div class="char-count"><span id="c5">0</span> / 400</div>
+                <div class="field-error" id="e5">Questa risposta è preziosa — anche una riga.</div>
+            </div>
+
+            <div class="question-block">
+                <span class="question-num">06 — Facoltativo</span>
+                <label class="question-label" for="q6">C'è qualcosa che vuoi aggiungere?</label>
+                <p class="question-hint">Qualsiasi cosa non sia entrata nelle domande precedenti.</p>
+                <textarea id="q6" name="q6" placeholder="Voglio aggiungere che…" maxlength="600"></textarea>
+                <div class="char-count"><span id="c6">0</span> / 600</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="consent-wrap">
+                <input type="checkbox" id="consenso" name="consenso">
+                <label for="consenso">Acconsento che Sara Autunnale utilizzi questa testimonianza (in forma anonima o con il mio nome) per presentare il suo lavoro online e offline.</label>
+            </div>
+            <div class="field-error" id="e-consenso" style="margin-top:-36px; margin-bottom:36px;">Per procedere è necessario il consenso.</div>
+
+            <div class="submit-wrap">
+                <button type="submit" class="btn-submit" id="btn-submit">Invia la mia testimonianza</button>
+            </div>
+
+        </form>
+
+        <div class="success-screen" id="success">
+            <div class="success-icon">✦</div>
+            <h2>Grazie di cuore.</h2>
+            <p>Le tue parole sono preziose.<br>Quello che hai scritto aiuterà altre persone a capire se questo lavoro fa per loro.</p>
+        </div>
+
+    </div>
+
+    <footer>Sara Autunnale © 2026</footer>
+
+    <script>
+        const starField = document.getElementById('star-field');
+        for (let i = 0; i < 70; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = star.style.height = Math.random() * 2 + 'px';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.setProperty('--d', (Math.random() * 4 + 2) + 's');
+            starField.appendChild(star);
+        }
+
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.question-block, .consent-wrap, .submit-wrap').forEach(el => obs.observe(el));
+
+        [['q1','c1'],['q2','c2'],['q3','c3'],['q5','c5'],['q6','c6']].forEach(([id, cid]) => {
+            const el = document.getElementById(id);
+            const ct = document.getElementById(cid);
+            el.addEventListener('input', () => ct.textContent = el.value.length);
+        });
+
+        let scalePrima = null, scaleDopo = null;
+
+        function buildScale(containerId) {
+            const wrap = document.getElementById(containerId);
+            for (let i = 0; i <= 10; i++) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'scale-btn';
+                btn.textContent = i;
+                btn.addEventListener('click', () => {
+                    wrap.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    if (containerId === 'scale-prima') scalePrima = i;
+                    else scaleDopo = i;
+                });
+                wrap.appendChild(btn);
+            }
+        }
+
+        buildScale('scale-prima');
+        buildScale('scale-dopo');
+
+        document.getElementById('review-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let valid = true;
+
+            [['q1','e1'],['q2','e2'],['q3','e3'],['q5','e5']].forEach(([id, err]) => {
+                const val = document.getElementById(id).value.trim();
+                const errEl = document.getElementById(err);
+                if (!val) { errEl.classList.add('show'); valid = false; }
+                else errEl.classList.remove('show');
+            });
+
+            const e4 = document.getElementById('e4');
+            if (scalePrima === null || scaleDopo === null) { e4.classList.add('show'); valid = false; }
+            else e4.classList.remove('show');
+
+            const consenso = document.getElementById('consenso');
+            const ec = document.getElementById('e-consenso');
+            if (!consenso.checked) { ec.classList.add('show'); valid = false; }
+            else ec.classList.remove('show');
+
+            if (!valid) return;
+
+            const btn = document.getElementById('btn-submit');
+            btn.disabled = true;
+            btn.textContent = 'Invio in corso…';
+
+            const nome = document.getElementById('nome').value.trim() || 'Anonimo';
+            const q1 = document.getElementById('q1').value.trim();
+            const q2 = document.getElementById('q2').value.trim();
+            const q3 = document.getElementById('q3').value.trim();
+            const q5 = document.getElementById('q5').value.trim();
+            const q6 = document.getElementById('q6').value.trim();
+
+            const body = `NUOVA TESTIMONIANZA — Sara Autunnale\n${'─'.repeat(40)}\n\nNome: ${nome}\n\n01 — Prima della sessione:\n${q1}\n\n02 — Momento di cambiamento:\n${q2}\n\n03 — Dopo la sessione:\n${q3}\n\n04 — Scala:\nPrima: ${scalePrima}/10 → Dopo: ${scaleDopo}/10\n\n05 — Come la descriverebbe:\n${q5}\n\n06 — Aggiunta:\n${q6 || '(nessuna)'}\n\nConsenso: SÌ\n${'─'.repeat(40)}`;
+
+            const mailtoLink = `mailto:sara.autunnale@gmail.com?subject=Testimonianza%20di%20${encodeURIComponent(nome)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+
+            setTimeout(() => {
+                document.getElementById('review-form').style.display = 'none';
+                document.getElementById('success').classList.add('show');
+            }, 800);
+        });
+    </script>
+</body>
+</html>

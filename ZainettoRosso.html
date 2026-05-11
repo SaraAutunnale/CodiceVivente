@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risveglia la tua Mente</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05070a;
+    --panel: rgba(255,255,255,0.04);
+    --panel-hover: rgba(255,255,255,0.08);
+    --line: rgba(255,255,255,0.1);
+    --line-bright: rgba(125,211,252,0.35);
+    --accent: #7dd3fc;
+    --accent-soft: rgba(125,211,252,0.1);
+    --accent-glow: rgba(125,211,252,0.4);
+    --accent2: #a78bfa;
+    --text: #f4f1ea;
+    --text-muted: rgba(244,241,234,0.55);
+    --text-dim: rgba(244,241,234,0.25);
+    --green: #6ee7b7;
+    --red: #f87171;
+    --radius: 20px;
+    --radius-sm: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  #universe {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(ellipse at 30% 20%, rgba(99,102,241,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 75% 70%, rgba(125,211,252,0.05) 0%, transparent 50%);
+  }
+  .star {
+    position: absolute; background: white; border-radius: 50%; opacity: 0.2;
+    animation: twinkle var(--d,3s) infinite ease-in-out var(--delay,0s);
+  }
+  @keyframes twinkle { 0%,100%{opacity:0.1;transform:scale(1);} 50%{opacity:0.8;transform:scale(1.5);} }
+  .container { position:relative; z-index:1; max-width:700px; margin:0 auto; padding:70px 24px 120px; }
+  .header { text-align:center; margin-bottom:56px; animation:fadeDown 1s cubic-bezier(0.2,1,0.3,1) both; }
+  .header .eyebrow { font-family:'Inter',sans-serif; font-size:10px; font-weight:400; letter-spacing:0.4em; color:var(--accent); text-transform:uppercase; margin-bottom:18px; opacity:0.8; }
+  .header h1 { font-size:clamp(38px,7vw,60px); font-weight:300; font-style:italic; color:var(--text); line-height:1.05; letter-spacing:0.03em; }
+  .header p { margin-top:18px; color:var(--text-muted); font-size:17px; font-style:italic; max-width:440px; margin-left:auto; margin-right:auto; }
+  .progress-track { display:flex; gap:5px; margin-bottom:52px; animation:fadeUp 0.8s 0.3s cubic-bezier(0.2,1,0.3,1) both; }
+  .progress-dot { height:2px; flex:1; background:var(--line); border-radius:2px; transition:all 0.5s ease; }
+  .progress-dot.active { background:var(--accent); box-shadow:0 0 8px var(--accent-glow); }
+  .progress-dot.done { background:var(--accent); opacity:0.3; }
+  .step { display:none; animation:fadeUp 0.6s cubic-bezier(0.2,1,0.3,1) both; }
+  .step.visible { display:block; }
+  .step-label { font-family:'Inter',sans-serif; font-size:10px; font-weight:400; letter-spacing:0.3em; color:var(--accent); text-transform:uppercase; margin-bottom:14px; opacity:0.7; }
+  .step h2 { font-size:30px; font-weight:300; font-style:italic; margin-bottom:22px; line-height:1.25; }
+  .step .instruction { color:var(--text-muted); font-size:16px; margin-bottom:28px; line-height:1.9; }
+  .step .instruction strong { color:var(--text); font-weight:600; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:26px 28px; margin-bottom:20px; backdrop-filter:blur(16px); transition:border-color 0.3s,background 0.3s; }
+  .card:focus-within { border-color:var(--line-bright); background:var(--panel-hover); }
+  textarea { width:100%; background:transparent; border:none; border-bottom:1px solid var(--line); color:var(--text); font-family:'Cormorant Garamond',Georgia,serif; font-size:17px; line-height:1.7; padding:12px 0; resize:none; outline:none; transition:border-color 0.3s; min-height:100px; }
+  textarea:focus { border-color:var(--accent); }
+  textarea::placeholder { color:var(--text-dim); font-style:italic; }
+  .input-line { display:flex; align-items:baseline; gap:14px; border-bottom:1px solid var(--line); padding:11px 0; transition:border-color 0.3s; }
+  .input-line:focus-within { border-color:var(--accent); }
+  .input-line .num { font-family:'Inter',sans-serif; font-size:10px; font-weight:300; color:var(--text-dim); min-width:20px; letter-spacing:0.1em; }
+  .input-line input { flex:1; background:transparent; border:none; color:var(--text); font-family:'Cormorant Garamond',Georgia,serif; font-size:17px; outline:none; }
+  .input-line input::placeholder { color:var(--text-dim); font-style:italic; }
+  .slider-wrap { margin:24px 0; }
+  .slider-label { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .slider-label span { color:var(--text-muted); font-size:14px; font-family:'Inter',sans-serif; }
+  .slider-value { font-size:44px; font-style:italic; color:var(--accent); line-height:1; text-shadow:0 0 20px var(--accent-glow); }
+  input[type="range"] { -webkit-appearance:none; width:100%; height:1px; background:linear-gradient(to right, var(--accent) var(--pct,50%), var(--line) var(--pct,50%)); outline:none; border-radius:2px; cursor:pointer; }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:20px; height:20px; border-radius:50%; background:var(--bg); border:2px solid var(--accent); box-shadow:0 0 14px var(--accent-glow); cursor:pointer; transition:transform 0.15s,box-shadow 0.15s; }
+  input[type="range"]::-webkit-slider-thumb:hover { transform:scale(1.25); box-shadow:0 0 24px var(--accent-glow); }
+  .slider-ticks { display:flex; justify-content:space-between; margin-top:10px; }
+  .slider-ticks span { font-family:'Inter',sans-serif; font-size:9px; color:var(--text-dim); }
+  .thought-display { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:22px 26px; margin-bottom:24px; backdrop-filter:blur(12px); }
+  .thought-display .label { font-family:'Inter',sans-serif; font-size:9px; font-weight:400; letter-spacing:0.3em; color:var(--text-dim); text-transform:uppercase; margin-bottom:12px; }
+  .thought-display .mother-thought { font-size:20px; font-style:italic; color:var(--accent); line-height:1.5; }
+  .thought-selector { display:flex; flex-direction:column; gap:8px; margin-bottom:24px; }
+  .thought-option { padding:14px 20px; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius-sm); cursor:pointer; font-family:'Cormorant Garamond',serif; font-size:16px; font-style:italic; color:var(--text-muted); text-align:left; transition:all 0.3s ease; backdrop-filter:blur(10px); }
+  .thought-option:hover { border-color:var(--line-bright); color:var(--text); background:var(--panel-hover); transform:translateX(4px); }
+  .thought-option.selected { border-color:var(--accent); background:var(--accent-soft); color:var(--text); box-shadow:0 0 20px rgba(125,211,252,0.08); }
+  .personality-box { background:var(--accent-soft); border:1px solid var(--line-bright); border-radius:var(--radius); padding:26px; margin:24px 0; text-align:center; backdrop-filter:blur(12px); }
+  .personality-box .label { font-family:'Inter',sans-serif; font-size:9px; letter-spacing:0.3em; color:var(--accent); text-transform:uppercase; margin-bottom:12px; opacity:0.8; }
+  .personality-box .value { font-size:28px; font-style:italic; font-weight:300; color:var(--text); }
+  .affirmations { display:flex; flex-direction:column; }
+  .affirmation-item { display:flex; align-items:flex-start; gap:18px; padding:18px 0; border-bottom:1px solid var(--line); cursor:pointer; transition:all 0.25s; }
+  .affirmation-item:last-child { border-bottom:none; }
+  .affirmation-item:hover { padding-left:6px; }
+  .affirmation-check { width:24px; height:24px; border:1px solid var(--line); border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; margin-top:2px; transition:all 0.4s; font-size:11px; background:var(--panel); }
+  .affirmation-item.checked .affirmation-check { background:var(--accent); border-color:var(--accent); box-shadow:0 0 14px var(--accent-glow); color:var(--bg); }
+  .affirmation-item .text { font-size:17px; font-style:italic; line-height:1.6; color:var(--text-muted); transition:color 0.25s; }
+  .affirmation-item.checked .text { color:var(--text); }
+  .visualization { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:36px 32px; text-align:center; margin:24px 0; backdrop-filter:blur(16px); }
+  .viz-orb { width:56px; height:56px; margin:0 auto 20px; border-radius:50%; background:radial-gradient(circle at 35% 35%, rgba(125,211,252,0.9), rgba(125,211,252,0.15) 70%); box-shadow:0 0 28px var(--accent-glow), inset 0 0 12px rgba(255,255,255,0.15); animation:float 3s ease-in-out infinite; }
+  .viz-text { font-size:16px; color:var(--text-muted); font-style:italic; line-height:1.9; }
+  .timer-display { text-align:center; padding:32px; margin:16px 0; }
+  .timer-circle { width:120px; height:120px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; margin:0 auto 20px; position:relative; font-size:28px; font-style:italic; color:var(--accent); font-family:'Inter',sans-serif; font-weight:300; }
+  .timer-circle svg { position:absolute; top:-1px; left:-1px; transform:rotate(-90deg); }
+  .timer-circle svg circle { fill:none; stroke:var(--accent); stroke-width:1.5; stroke-dasharray:376; stroke-dashoffset:376; transition:stroke-dashoffset 1s linear; filter:drop-shadow(0 0 4px var(--accent-glow)); }
+  .btn { display:inline-flex; align-items:center; gap:10px; padding:14px 30px; border:1px solid var(--line-bright); border-radius:2px; background:transparent; color:var(--text); font-family:'Inter',sans-serif; font-size:11px; font-weight:400; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; transition:all 0.35s ease; }
+  .btn:hover { background:var(--text); border-color:var(--text); color:var(--bg); letter-spacing:0.25em; }
+  .btn-primary { border-color:var(--accent); color:var(--accent); }
+  .btn-primary:hover { background:var(--accent); color:var(--bg); box-shadow:0 0 30px var(--accent-glow); letter-spacing:0.25em; }
+  .btn-ghost { border-color:var(--line); color:var(--text-muted); }
+  .btn-ghost:hover { border-color:var(--line-bright); background:transparent; color:var(--text); letter-spacing:0.2em; }
+  .btn-row { display:flex; gap:12px; margin-top:36px; flex-wrap:wrap; }
+  .summary-list { display:flex; flex-direction:column; margin:8px 0; }
+  .summary-item { display:flex; align-items:flex-start; gap:14px; padding:12px 0; border-bottom:1px solid var(--line); }
+  .summary-item:last-child { border-bottom:none; }
+  .summary-item .s-num { font-family:'Inter',sans-serif; font-size:10px; color:var(--accent); min-width:24px; padding-top:3px; opacity:0.7; }
+  .summary-item .s-text { font-size:15px; font-style:italic; color:var(--text-muted); line-height:1.6; }
+  .score-compare { display:flex; gap:40px; justify-content:center; margin:28px 0; align-items:center; }
+  .score-box { text-align:center; }
+  .score-box .score-num { font-size:60px; font-style:italic; font-weight:300; color:var(--accent); line-height:1; text-shadow:0 0 30px var(--accent-glow); }
+  .score-box .score-label { font-family:'Inter',sans-serif; font-size:9px; letter-spacing:0.25em; color:var(--text-dim); text-transform:uppercase; margin-top:10px; }
+  .score-arrow { font-size:22px; color:var(--green); opacity:0.8; }
+  .final-screen { text-align:center; padding:48px 0; }
+  .final-screen .big-icon { display:block; margin:0 auto 28px; width:76px; height:76px; border-radius:50%; animation:float 3s ease-in-out infinite; }
+  .final-screen h2 { font-size:38px; font-weight:300; font-style:italic; margin-bottom:14px; }
+  .final-screen p { color:var(--text-muted); font-size:17px; font-style:italic; margin-bottom:32px; }
+  .divider { border:none; border-top:1px solid var(--line); margin:32px 0; }
+  .intro-box { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:32px; margin-bottom:32px; backdrop-filter:blur(16px); }
+  .intro-step { display:flex; gap:18px; padding:14px 0; border-bottom:1px solid var(--line); font-size:15px; color:var(--text-muted); align-items:center; }
+  .intro-step:last-child { border-bottom:none; }
+  .intro-step .icon { font-size:20px; flex-shrink:0; }
+  .note-card { background:rgba(125,211,252,0.05); border:1px solid rgba(125,211,252,0.18); border-radius:var(--radius); padding:24px 28px; margin-bottom:24px; backdrop-filter:blur(12px); }
+  .note-card p { font-size:15px; color:var(--text-muted); line-height:1.9; font-style:italic; }
+  .note-card strong { color:var(--text); font-style:normal; }
+  @keyframes backpackSuck { 0%{transform:translate(-50%,-50%) scale(1) rotate(0deg);opacity:1;} 30%{transform:translate(-50%,-65%) scale(0.82) rotate(200deg);opacity:1;} 70%{transform:translate(-50%,-82%) scale(0.38) rotate(580deg);opacity:0.6;} 100%{transform:translate(-50%,-92%) scale(0) rotate(980deg);opacity:0;} }
+  @keyframes energyDescend { 0%{opacity:0;transform:translate(-50%,-50%) translateY(-20px) scale(0.7);} 50%{opacity:1;transform:translate(-50%,-50%) translateY(0) scale(1.15);} 100%{opacity:0.9;transform:translate(-50%,-50%) translateY(0) scale(1);} }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-24px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-9px);} }
+  .hidden { display:none !important; }
+  @media(max-width:480px){ .container{padding:40px 16px 80px;} .score-compare{gap:20px;} .btn-row{flex-direction:column;} .btn{width:100%;justify-content:center;} .step h2{font-size:26px;} }
+</style>
+</head>
+<body>
+
+<div id="universe"></div>
+
+<div class="container">
+
+  <div class="header">
+    <div class="eyebrow">Esercizio di Consapevolezza</div>
+    <h1>Risveglia<br>la tua Mente</h1>
+    <p>Un percorso guidato per liberarti dai pensieri invalidanti e ritrovare il tuo equilibrio interiore.</p>
+  </div>
+
+  <div class="progress-track" id="progressTrack"></div>
+
+  <!-- STEP 0 -->
+  <div class="step visible" id="step-0">
+    <div class="step-label">Benvenuto</div>
+    <h2>Prima di iniziare</h2>
+    <p class="instruction">Questo esercizio ti guiderà in <strong>9 fasi</strong> verso la liberazione dai pensieri che ti creano malessere. Prenditi il tempo necessario per ogni passaggio.</p>
+    <div class="intro-box">
+      <div class="intro-step"><span class="icon" style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;opacity:0.6;flex-shrink:0;margin-top:8px;"></span><span>Trova un posto appartato e tranquillo, lontano da distrazioni</span></div>
+      <div class="intro-step"><span class="icon" style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;opacity:0.6;flex-shrink:0;margin-top:8px;"></span><span>Mettiti comodo e lasciati andare senza giudicarti</span></div>
+      <div class="intro-step"><span class="icon" style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;opacity:0.6;flex-shrink:0;margin-top:8px;"></span><span>Scrivi liberamente: non ci sono risposte giuste o sbagliate</span></div>
+      <div class="intro-step"><span class="icon" style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;opacity:0.6;flex-shrink:0;margin-top:8px;"></span><span>Ogni fase ha il suo tempo — non avere fretta</span></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="nextStep()">Sono pronto — iniziamo →</button></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step" id="step-1">
+    <div class="step-label">Fase 1 di 9</div>
+    <h2>I pensieri madre</h2>
+    <p class="instruction">Accomodati nel luogo prestabilito e lasciati andare al primo pensiero.<br><br>Scrivi qui sotto i pensieri che ti creano disagio: possono essere <strong>sentimenti, azioni, stati d'animo</strong> — tuoi o di altri. Non filtrare, scrivi liberamente.</p>
+    <div class="card">
+      <div id="motherThoughtInputs">
+        <div class="input-line"><span class="num">1.</span><input type="text" placeholder="es. sono arrabbiato con mia sorella perché è cocciuta…" oninput="updateMotherCount()"></div>
+        <div class="input-line"><span class="num">2.</span><input type="text" placeholder="un altro pensiero…" oninput="updateMotherCount()"></div>
+        <div class="input-line"><span class="num">3.</span><input type="text" placeholder="un altro pensiero…" oninput="updateMotherCount()"></div>
+        <div class="input-line"><span class="num">4.</span><input type="text" placeholder="un altro pensiero…" oninput="updateMotherCount()"></div>
+        <div class="input-line"><span class="num">5.</span><input type="text" placeholder="un altro pensiero…" oninput="updateMotherCount()"></div>
+      </div>
+      <div style="margin-top:20px;"><button class="btn btn-ghost" onclick="addMotherThought()" style="padding:8px 18px;font-size:9px;">+ Aggiungi</button></div>
+    </div>
+    <p class="instruction" style="font-size:14px;"><em>Nota come la mente, una volta esternati i pensieri, tende a calmarsi.</em></p>
+    <div class="btn-row"><button class="btn btn-primary" onclick="goToStep2()">Continua →</button></div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step" id="step-2">
+    <div class="step-label">Fase 2 di 9</div>
+    <h2>Scegli un pensiero</h2>
+    <p class="instruction">La mente si è chetata. Ora scegli <strong>uno dei pensieri madre</strong> annotati — quello che senti più urgente, o quello che ti attrae di più in questo momento.</p>
+    <div class="thought-selector" id="thoughtSelector"></div>
+    <p class="instruction" style="font-size:14px;">Poi indica quanto questo pensiero, nel rileggilo, ti risulta <strong>invalidante</strong>:</p>
+    <div class="slider-wrap">
+      <div class="slider-label"><span>0 = non mi fa stare male · 10 = mi fa stare molto male</span><span class="slider-value" id="initialScoreDisplay">5</span></div>
+      <input type="range" min="0" max="10" value="5" id="initialScore" oninput="updateSlider(this,'initialScoreDisplay')">
+      <div class="slider-ticks"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goToStep3()">Continua →</button>
+      <button class="btn btn-ghost" onclick="prevStep()">← Torna</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step" id="step-3">
+    <div class="step-label">Fase 3 di 9</div>
+    <h2>I pensieri nascosti</h2>
+    <p class="instruction">Fissa la tua attenzione sul pensiero madre scelto:</p>
+    <div class="thought-display"><div class="label">Il tuo pensiero madre</div><div class="mother-thought" id="selectedThoughtDisplay"></div></div>
+    <p class="instruction">Noterai che affioriranno ulteriori pensieri associati. Scrivi <strong>tutto ciò che emerge</strong>: sensazioni, emozioni, immagini mentali legate a quel pensiero.</p>
+    <div class="card">
+      <div id="hiddenThoughtInputs">
+        <div class="input-line"><span class="num">•</span><input type="text" placeholder="es. mi fa sentire indegno…"></div>
+        <div class="input-line"><span class="num">•</span><input type="text" placeholder="es. mi fa sentire stupido…"></div>
+        <div class="input-line"><span class="num">•</span><input type="text" placeholder="es. mi sento uno schiavo…"></div>
+        <div class="input-line"><span class="num">•</span><input type="text" placeholder="un'altra sensazione…"></div>
+        <div class="input-line"><span class="num">•</span><input type="text" placeholder="un'altra sensazione…"></div>
+      </div>
+      <div style="margin-top:20px;"><button class="btn btn-ghost" onclick="addHiddenThought()" style="padding:8px 18px;font-size:9px;">+ Aggiungi</button></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goToStep4()">Continua →</button>
+      <button class="btn btn-ghost" onclick="prevStep()">← Torna</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step" id="step-4">
+    <div class="step-label">Fase 4 di 9</div>
+    <h2>La personalità nascosta</h2>
+    <p class="instruction">Guarda questi pensieri nascosti con gli occhi di un estraneo, con obiettività.</p>
+    <div class="thought-display" id="hiddenThoughtsSummary"></div>
+    <p class="instruction">Guardando questi pensieri, come potresti definire brevemente la persona che prova tutto questo?<br><br>Scrivi la "personalità nascosta" che emerge — una breve descrizione che racchiuda l'emozione:</p>
+    <div class="card"><div class="input-line"><input type="text" id="personalityInput" placeholder="es. una persona insicura… una persona che si sente invisibile…" style="font-size:20px;font-style:italic;"></div></div>
+    <p class="instruction" style="font-size:14px;margin-top:8px;"><em>Senti se questa definizione, nel rileggila, racchiude davvero l'emozione che hai descritto.</em></p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goToStep5()">Continua →</button>
+      <button class="btn btn-ghost" onclick="currentStep=3;showStep(3);">← Torna</button>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step" id="step-5">
+    <div class="step-label">Fase 5 di 9</div>
+    <h2>Lo zaino rosso</h2>
+    <p class="instruction">Ora immagina uno <strong>zaino rosso</strong> che compare alla tua destra.</p>
+    <div class="visualization"><div class="viz-orb"></div><div class="viz-text">Visualizza chiaramente questo zaino rosso.<br>Apri la cerniera e, lentamente, inserisci al suo interno il tuo pensiero madre.</div></div>
+    <div class="thought-display" style="margin-top:16px;"><div class="label">Pensiero madre da inserire nello zaino</div><div class="mother-thought" id="backpackThought"></div></div>
+    <p class="instruction" style="margin-top:20px;">Una volta sistemato, chiudi bene la cerniera. <em>Stai pur certo che non ne uscirà più.</em></p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="nextStep()">Ho messo il pensiero nello zaino →</button>
+      <button class="btn btn-ghost" onclick="prevStep()">← Torna</button>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step" id="step-6">
+    <div class="step-label">Fase 6 di 9</div>
+    <h2>Il primo ricordo</h2>
+    <div class="personality-box" id="personalityReminder"></div>
+    <p class="instruction">Chiudi gli occhi. Respira lentamente.<br><br>Poi di' a te stesso, in silenzio:</p>
+    <div class="card" style="text-align:center;padding:36px;">
+      <p style="font-size:22px;font-style:italic;color:var(--text);line-height:1.65;" id="mindPrompt">"Mente, fammi vedere la prima volta che sono stato <em id="personalityInPrompt">così</em>."</p>
+    </div>
+    <p class="instruction" style="margin-top:24px;">Lascia che la mente scavi nei ricordi. Potranno emergere scene lontane, apparentemente fuori contesto.<br><br>Quando trovi il momento, <strong>riconoscilo</strong>. Non rivivere il dramma — basta riconoscere quella parte di te.</p>
+    <textarea id="memoryText" placeholder="Descrivi brevemente il ricordo emerso, se vuoi (facoltativo)…" style="margin-top:16px;"></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="nextStep()">Ho trovato il ricordo →</button>
+      <button class="btn btn-ghost" onclick="prevStep()">← Torna</button>
+    </div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="step" id="step-7">
+    <div class="step-label">Fase 7 di 9</div>
+    <h2>L'accettazione</h2>
+    <p class="instruction">Hai trovato quella parte nascosta di te. Ora hai due strade:<br>fare finta di niente, oppure <strong>accettarla con amore</strong> — senza rabbia, senza remore.</p>
+    <p class="instruction">Hai fatto, all'epoca, una scelta che probabilmente oggi non rifaresti. <em>Va bene così.</em></p>
+    <div class="thought-display" id="memoryRecap" style="display:none;margin:20px 0;">
+      <div class="label">Il ricordo emerso</div>
+      <div class="mother-thought" id="memoryRecapText" style="font-size:16px;font-style:italic;color:var(--text-muted);line-height:1.7;"></div>
+    </div>
+    <hr class="divider">
+    <p class="instruction" style="margin-bottom:16px;">Leggi e accogli queste affermazioni, una alla volta, spuntandole quando le senti tue:</p>
+    <div class="note-card" style="margin-bottom:24px;">
+      <p>Se queste frasi, tutte o alcune, <strong>non le senti realmente con il cuore</strong>, vuol dire che hai ancora delle situazioni irrisolte nascoste all'interno che è necessario tirare fuori.<br><br>Segna solo le frasi che senti davvero tue. Quelle che non riesci ad accogliere, <strong>scrivile a parte su un foglio</strong>: termina questo esercizio, poi iniziane un altro usando una di quelle frasi come nuovo <em>pensiero madre</em> di partenza.</p>
+    </div>
+    <div class="affirmations" id="affirmationsList">
+      <div class="affirmation-item" onclick="toggleAffirmation(this)"><div class="affirmation-check"></div><div class="text">Accetto il mio dramma, perché lo amo e fa parte di me.</div></div>
+      <div class="affirmation-item" onclick="toggleAffirmation(this)"><div class="affirmation-check"></div><div class="text">Mi perdono per avermelo taciuto e nascosto per così a lungo.</div></div>
+      <div class="affirmation-item" onclick="toggleAffirmation(this)"><div class="affirmation-check"></div><div class="text">Mi assumo la responsabilità del mio dolore e mi perdono per questo.</div></div>
+      <div class="affirmation-item" onclick="toggleAffirmation(this)"><div class="affirmation-check"></div><div class="text">Perdono coloro che hanno contribuito alla mia creazione e perdono me stesso per averlo capito solo ora.</div></div>
+      <div class="affirmation-item" onclick="toggleAffirmation(this)"><div class="affirmation-check"></div><div class="text">Ora sono pronto a lasciare andare.</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="nextStep()">Ho letto le affermazioni →</button>
+      <button class="btn btn-ghost" onclick="prevStep()">← Torna</button>
+    </div>
+  </div>
+
+  <!-- STEP 8 -->
+  <div class="step" id="step-8">
+    <div class="step-label">Fase 8 di 9</div>
+    <h2>Raccogli tutto nello zaino</h2>
+    <p class="instruction">Immagina di nuovo lo zaino rosso. Ora inserisci al suo interno <strong>tutto</strong>:</p>
+    <div class="card"><div class="summary-list" id="finalSummary"></div></div>
+    <p class="instruction" style="margin-top:20px;">Una volta fatto, <strong>chiudi ermeticamente lo zaino</strong>. Sigillalo bene.</p>
+    <div class="visualization"><div class="viz-orb"></div><div class="viz-text">Tutto il dolore, tutte le sensazioni emerse, sono ora contenute nello zaino.<br>La cerniera è chiusa. Sono al sicuro lì dentro.</div></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="nextStep()">Lo zaino è chiuso →</button>
+      <button class="btn btn-ghost" onclick="prevStep()">← Torna</button>
+    </div>
+  </div>
+
+  <!-- STEP 9: VORTEX -->
+  <div class="step" id="step-9">
+    <div class="step-label">Fase 9 di 9</div>
+    <h2>Il vortice</h2>
+    <p class="instruction">Immagina sopra la tua testa un <strong>vortice di energia</strong> — come una tromba d'aria luminosa — che aspetta solo di inghiottire lo zaino.</p>
+    <div style="position:relative;width:100%;height:320px;overflow:hidden;border-radius:20px;background:var(--panel);border:1px solid var(--line);margin-bottom:20px;backdrop-filter:blur(16px);">
+      <canvas id="vortexCanvas" width="400" height="320" style="position:absolute;top:0;left:50%;transform:translateX(-50%);"></canvas>
+      <div id="bpEmoji" style="position:absolute;top:72%;left:50%;transform:translate(-50%,-50%);z-index:10;pointer-events:none;">
+        <div style="width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 35%, rgba(125,211,252,0.95), rgba(125,211,252,0.2) 70%);box-shadow:0 0 24px var(--accent-glow), inset 0 0 10px rgba(255,255,255,0.2);"></div>
+      </div>
+      <div id="energyBurst" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0;pointer-events:none;z-index:10;">
+        <div style="width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 40% 40%, rgba(255,255,255,0.95), rgba(125,211,252,0.4) 60%, transparent 80%);box-shadow:0 0 40px rgba(125,211,252,0.8), 0 0 80px rgba(125,211,252,0.4);"></div>
+      </div>
+      <div id="vortexStatusText" style="position:absolute;bottom:16px;width:100%;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:var(--text-muted);">Premi il pulsante per liberare lo zaino nel vortice</div>
+    </div>
+    <div class="btn-row" id="vortexButtons">
+      <button class="btn btn-primary" onclick="launchVortex()">Lascia andare lo zaino</button>
+      <button class="btn btn-ghost" onclick="prevStep()">← Torna indietro</button>
+    </div>
+    <div class="hidden" id="afterVortex">
+      <p class="instruction" style="margin-top:28px;text-align:center;"> <em>Nuova energia scende su di te. Ti senti più leggero, più forte.</em></p>
+      <p class="instruction" style="font-size:14px;text-align:center;">Attendi qualche minuto prima di passare alla verifica finale.</p>
+      <div class="timer-display">
+        <div class="timer-circle">
+          <svg width="124" height="124" viewBox="0 0 124 124"><circle cx="62" cy="62" r="60" id="timerArc"/></svg>
+          <span id="timerText">5:00</span>
+        </div>
+        <button class="btn btn-ghost" onclick="skipTimer()" style="font-size:9px;padding:8px 18px;">salta →</button>
+      </div>
+      <div class="hidden btn-row" id="continueToFinal" style="justify-content:center;">
+        <button class="btn btn-primary" onclick="nextStep()">Riesamina il pensiero →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 10 -->
+  <div class="step" id="step-10">
+    <div class="step-label">Verifica finale</div>
+    <h2>Come ti senti ora?</h2>
+    <p class="instruction">Rileggi il pensiero madre che hai esaminato:</p>
+    <div class="thought-display"><div class="label">Il pensiero madre</div><div class="mother-thought" id="finalThoughtDisplay"></div></div>
+    <p class="instruction" style="margin-top:20px;">Da <strong>0 a 10</strong>, quanto risulta ancora invalidante per te questo pensiero?</p>
+    <div class="slider-wrap">
+      <div class="slider-label"><span>0 = non mi fa stare male · 10 = mi fa stare molto male</span><span class="slider-value" id="finalScoreDisplay">5</span></div>
+      <input type="range" min="0" max="10" value="5" id="finalScore" oninput="updateSlider(this,'finalScoreDisplay')">
+      <div class="slider-ticks"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="showResult()">Vedi il risultato →</button></div>
+  </div>
+
+  <!-- STEP 11 -->
+  <div class="step" id="step-11">
+    <div class="final-screen">
+      <div class="big-icon" id="finalIcon"></div>
+      <h2 id="finalTitle">Ottimo lavoro</h2>
+      <p id="finalMessage">Hai completato l'esercizio.</p>
+      <div class="score-compare" id="scoreCompare"></div>
+      <div id="finalAdvice" class="instruction" style="max-width:480px;margin:0 auto 36px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:28px;backdrop-filter:blur(12px);"></div>
+      <div class="btn-row" style="justify-content:center;">
+        <button class="btn btn-ghost" onclick="currentStep=10;showStep(10);">← Torna indietro</button>
+        <button class="btn btn-primary" onclick="restartExercise()">✦ Nuovo esercizio</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Stars
+  const universe = document.getElementById('universe');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random() * 2.2;
+    s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;--delay:-${(Math.random()*6).toFixed(1)}s;`;
+    universe.appendChild(s);
+  }
+
+  // State
+  let currentStep = 0;
+  let selectedThought = '';
+  let initialScore = 5;
+  let timerInterval = null;
+  let timerSeconds = 300;
+  let vortexRAF = null;
+  let vortexPhase = 'idle';
+
+  // Progress
+  function initProgress() {
+    const track = document.getElementById('progressTrack');
+    track.innerHTML = '';
+    for (let i = 1; i <= 9; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'progress-dot';
+      dot.id = 'dot-' + i;
+      track.appendChild(dot);
+    }
+  }
+
+  function updateProgress() {
+    for (let i = 1; i <= 9; i++) {
+      const dot = document.getElementById('dot-' + i);
+      if (!dot) continue;
+      if (i < currentStep) dot.className = 'progress-dot done';
+      else if (i === currentStep) dot.className = 'progress-dot active';
+      else dot.className = 'progress-dot';
+    }
+  }
+
+  function showStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('visible'));
+    const s = document.getElementById('step-' + n);
+    if (s) s.classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateProgress();
+    if (n === 9) {
+      const bp = document.getElementById('bpEmoji');
+      if (bp) { bp.style.display = ''; bp.style.animation = ''; }
+      const burst = document.getElementById('energyBurst');
+      if (burst) { burst.style.animation = ''; burst.style.opacity = '0'; }
+      const st = document.getElementById('vortexStatusText');
+      if (st) st.textContent = 'Premi il pulsante per liberare lo zaino nel vortice';
+      const btns = document.getElementById('vortexButtons');
+      if (btns) btns.classList.remove('hidden');
+      const after = document.getElementById('afterVortex');
+      if (after) after.classList.add('hidden');
+      const cont = document.getElementById('continueToFinal');
+      if (cont) cont.classList.add('hidden');
+      vortexPhase = 'idle';
+      setTimeout(initVortexCanvas, 50);
+    }
+  }
+
+  function nextStep() {
+    currentStep++;
+    showStep(currentStep);
+    if (currentStep === 7) {
+      const mem = document.getElementById('memoryText').value.trim();
+      const recap = document.getElementById('memoryRecap');
+      const recapText = document.getElementById('memoryRecapText');
+      if (mem) { recapText.textContent = mem; recap.style.display = 'block'; }
+      else { recap.style.display = 'none'; }
+    }
+  }
+
+  function prevStep() { if (currentStep > 0) { currentStep--; showStep(currentStep); } }
+
+  function updateSlider(el, displayId) {
+    const v = el.value;
+    document.getElementById(displayId).textContent = v;
+    el.style.setProperty('--pct', (v / 10 * 100) + '%');
+  }
+
+  function updateMotherCount() {}
+
+  function addMotherThought() {
+    const c = document.getElementById('motherThoughtInputs');
+    const num = c.querySelectorAll('.input-line').length + 1;
+    const d = document.createElement('div');
+    d.className = 'input-line';
+    d.innerHTML = `<span class="num">${num}.</span><input type="text" placeholder="un altro pensiero…" oninput="updateMotherCount()">`;
+    c.appendChild(d);
+  }
+
+  function getMotherThoughts() {
+    return Array.from(document.querySelectorAll('#motherThoughtInputs input')).map(i => i.value.trim()).filter(Boolean);
+  }
+
+  function goToStep2() {
+    const thoughts = getMotherThoughts();
+    if (!thoughts.length) { alert('Scrivi almeno un pensiero madre per continuare.'); return; }
+    const sel = document.getElementById('thoughtSelector');
+    sel.innerHTML = '';
+    thoughts.forEach((t, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'thought-option';
+      btn.textContent = (i + 1) + '. ' + t;
+      btn.onclick = function() {
+        document.querySelectorAll('.thought-option').forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedThought = t;
+      };
+      sel.appendChild(btn);
+    });
+    sel.querySelector('.thought-option').click();
+    currentStep = 2; showStep(2);
+  }
+
+  function goToStep3() {
+    if (!selectedThought) { alert('Seleziona un pensiero madre.'); return; }
+    initialScore = parseInt(document.getElementById('initialScore').value);
+    document.getElementById('selectedThoughtDisplay').textContent = selectedThought;
+    document.getElementById('backpackThought').textContent = selectedThought;
+    document.getElementById('finalThoughtDisplay').textContent = selectedThought;
+    currentStep = 3; showStep(3);
+  }
+
+  function addHiddenThought() {
+    const c = document.getElementById('hiddenThoughtInputs');
+    const d = document.createElement('div');
+    d.className = 'input-line';
+    d.innerHTML = `<span class="num">•</span><input type="text" placeholder="un'altra sensazione…">`;
+    c.appendChild(d);
+  }
+
+  function getHiddenThoughts() {
+    return Array.from(document.querySelectorAll('#hiddenThoughtInputs input')).map(i => i.value.trim()).filter(Boolean);
+  }
+
+  function goToStep4() {
+    const hidden = getHiddenThoughts();
+    if (!hidden.length) { alert('Scrivi almeno un pensiero nascosto per continuare.'); return; }
+    const summary = document.getElementById('hiddenThoughtsSummary');
+    summary.innerHTML = '<div class="label">I tuoi pensieri nascosti</div>';
+    hidden.forEach(t => {
+      const d = document.createElement('div');
+      d.style.cssText = 'padding:7px 0;border-bottom:1px solid var(--line);font-style:italic;color:var(--text-muted);font-size:16px;';
+      d.textContent = '• ' + t;
+      summary.appendChild(d);
+    });
+    currentStep = 4; showStep(4);
+  }
+
+  function goToStep5() {
+    const personality = document.getElementById('personalityInput').value.trim();
+    if (!personality) { alert('Definisci la personalità nascosta per continuare.'); return; }
+    document.getElementById('personalityReminder').innerHTML = `<div class="label">La tua personalità nascosta</div><div class="value">${personality}</div>`;
+    document.getElementById('personalityInPrompt').textContent = personality;
+    document.getElementById('mindPrompt').innerHTML = `"Mente, fammi vedere la prima volta che sono stato <em>${personality}</em>."`;
+    const hidden = getHiddenThoughts();
+    document.getElementById('finalSummary').innerHTML = `
+      <div class="summary-item"><span class="s-num">—</span><span class="s-text">Il pensiero madre: <em>${selectedThought}</em></span></div>
+      <div class="summary-item"><span class="s-num">—</span><span class="s-text">Pensieri nascosti: <em>${hidden.join(', ') || '—'}</em></span></div>
+      <div class="summary-item"><span class="s-num">—</span><span class="s-text">La personalità nascosta: <em>${personality}</em></span></div>
+      <div class="summary-item"><span class="s-num">—</span><span class="s-text">Il ricordo che hai ritrovato</span></div>
+      <div class="summary-item"><span class="s-num">—</span><span class="s-text">Tutto il dolore associato a questo percorso</span></div>`;
+    currentStep = 5; showStep(5);
+  }
+
+  function toggleAffirmation(el) {
+    el.classList.toggle('checked');
+    el.querySelector('.affirmation-check').textContent = el.classList.contains('checked') ? '✓' : '';
+  }
+
+  // Vortex
+  function initVortexCanvas() {
+    const canvas = document.getElementById('vortexCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H * 0.37;
+    let t = 0;
+    function drawFrame() {
+      ctx.clearRect(0, 0, W, H);
+      t += 0.020;
+      const rings = 9, maxR = 112;
+      for (let r = 0; r < rings; r++) {
+        const prog = r / rings;
+        const radius = maxR * (1 - prog * 0.82);
+        const opacity = vortexPhase === 'idle' ? 0.06 + prog * 0.14 : 0.1 + prog * 0.3;
+        const speed = vortexPhase === 'idle' ? 0.9 : (0.9 + (1 - prog) * 3.5);
+        const angle = t * speed + r * (Math.PI * 2 / rings);
+        const segs = 52 + r * 5;
+        const lw = 0.8 + prog * 2.2;
+        const hue = 200 + r * 6;
+        ctx.beginPath();
+        for (let i = 0; i <= segs; i++) {
+          const a = (i / segs) * Math.PI * 2 + angle;
+          const wob = Math.sin(a * 3 + t * 2 + r) * (radius * 0.055);
+          const rx = Math.cos(a) * (radius + wob);
+          const ry = Math.sin(a) * (radius + wob) * 0.36;
+          if (i === 0) ctx.moveTo(cx + rx, cy + ry); else ctx.lineTo(cx + rx, cy + ry);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = `hsla(${hue},78%,68%,${opacity})`;
+        ctx.lineWidth = lw;
+        ctx.stroke();
+      }
+      const gs = vortexPhase === 'idle' ? 12 : 16 + Math.sin(t * 4) * 5;
+      const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, gs);
+      grd.addColorStop(0, `rgba(125,211,252,${vortexPhase === 'idle' ? 0.55 : 0.9})`);
+      grd.addColorStop(1, 'rgba(125,211,252,0)');
+      ctx.beginPath(); ctx.arc(cx, cy, gs, 0, Math.PI * 2); ctx.fillStyle = grd; ctx.fill();
+      if (vortexPhase === 'sucking') {
+        for (let p = 0; p < 20; p++) {
+          const pa = (p / 20) * Math.PI * 2 + t * 2.8;
+          const pr = maxR * 0.88 * (1 - ((t * 0.38 + p * 0.065) % 1));
+          const px = cx + Math.cos(pa) * pr;
+          const py = cy + Math.sin(pa) * pr * 0.36;
+          ctx.beginPath(); ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(125,211,252,${Math.min(1, pr / (maxR * 0.4)) * 0.75})`; ctx.fill();
+        }
+      }
+      vortexRAF = requestAnimationFrame(drawFrame);
+    }
+    if (vortexRAF) cancelAnimationFrame(vortexRAF);
+    drawFrame();
+  }
+
+  function launchVortex() {
+    document.getElementById('vortexButtons').classList.add('hidden');
+    vortexPhase = 'sucking';
+    document.getElementById('vortexStatusText').textContent = 'Lo zaino viene risucchiato nel vortice…';
+    const bp = document.getElementById('bpEmoji');
+    bp.style.animation = 'backpackSuck 2s cubic-bezier(0.4,0,1,1) forwards';
+    setTimeout(() => {
+      bp.style.display = 'none';
+      document.getElementById('energyBurst').style.animation = 'energyDescend 1.2s ease forwards';
+      document.getElementById('vortexStatusText').textContent = 'Nuova energia scende su di te.';
+      vortexPhase = 'done';
+      setTimeout(() => { document.getElementById('afterVortex').classList.remove('hidden'); startTimer(); }, 1200);
+    }, 2000);
+  }
+
+  function startTimer() {
+    timerSeconds = 300;
+    const arc = document.getElementById('timerArc'), txt = document.getElementById('timerText'), total = 376;
+    timerInterval = setInterval(() => {
+      timerSeconds--;
+      const m = Math.floor(timerSeconds / 60), s = timerSeconds % 60;
+      txt.textContent = m + ':' + String(s).padStart(2, '0');
+      arc.style.strokeDashoffset = total - (total * (300 - timerSeconds) / 300);
+      if (timerSeconds <= 0) { clearInterval(timerInterval); document.getElementById('continueToFinal').classList.remove('hidden'); }
+    }, 1000);
+  }
+
+  function skipTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    document.getElementById('timerText').textContent = '✓';
+    document.getElementById('timerArc').style.strokeDashoffset = 0;
+    document.getElementById('continueToFinal').classList.remove('hidden');
+  }
+
+  function showResult() {
+    const final = parseInt(document.getElementById('finalScore').value);
+    const diff = initialScore - final;
+    const compare = document.getElementById('scoreCompare');
+    compare.innerHTML = `
+      <div class="score-box"><div class="score-num">${initialScore}</div><div class="score-label">Punteggio iniziale</div></div>
+      <div class="score-arrow">${diff > 0 ? '↓' : diff < 0 ? '↑' : '='}</div>
+      <div class="score-box"><div class="score-num" style="color:${final <= 0 ? 'var(--green)' : final < initialScore ? 'var(--green)' : 'var(--red)'};text-shadow:0 0 20px currentColor">${final}</div><div class="score-label">Punteggio finale</div></div>`;
+    const icon = document.getElementById('finalIcon'), title = document.getElementById('finalTitle');
+    const message = document.getElementById('finalMessage'), advice = document.getElementById('finalAdvice');
+    if (final === 0) {
+      icon.innerHTML = '<div style="width:76px;height:76px;border-radius:50%;background:radial-gradient(circle at 35% 35%, rgba(255,220,100,0.95), rgba(255,180,50,0.3) 70%);box-shadow:0 0 40px rgba(255,200,80,0.6);"></div>'; title.textContent = 'Liberazione completa';
+      message.textContent = 'Hai portato a 0 l\'intensità di quel pensiero. Ottimo lavoro.';
+      advice.innerHTML = 'Hai completato l\'esercizio con successo. Il pensiero che ti pesava è stato elaborato e rilasciato. <em>Sei libero da quel peso.</em>';
+    } else if (diff > 0) {
+      icon.innerHTML = '<div style="width:76px;height:76px;border-radius:50%;background:radial-gradient(circle at 35% 35%, rgba(110,231,183,0.95), rgba(110,231,183,0.2) 70%);box-shadow:0 0 40px rgba(110,231,183,0.5);"></div>'; title.textContent = `Ridotto di ${diff} punti`;
+      message.textContent = 'Hai fatto un ottimo lavoro. C\'è ancora qualcosa da equilibrare.';
+      advice.innerHTML = `Il punteggio è diminuito di <strong>${diff} punti</strong>: qualcosa si è alleggerito. Rimane ancora ${final}/10 di intensità. <em>Puoi ripetere l'esercizio per arrivare a 0, o tornare su un altro pensiero.</em>`;
+    } else if (diff === 0) {
+      icon.innerHTML = '<div style="width:76px;height:76px;border-radius:50%;background:radial-gradient(circle at 35% 35%, rgba(125,211,252,0.7), rgba(125,211,252,0.1) 70%);box-shadow:0 0 30px rgba(125,211,252,0.4);"></div>'; title.textContent = 'Nessun cambiamento ancora';
+      message.textContent = 'L\'esercizio ha bisogno di più attenzione su questo pensiero.';
+      advice.innerHTML = 'A volte il cambiamento richiede più passaggi. Prova a ripetere l\'esercizio concentrandoti di più sulla fase del ricordo e dell\'accettazione. <em>Ogni volta che ci provi, vai più in profondità.</em>';
+    } else {
+      icon.innerHTML = '<div style="width:76px;height:76px;border-radius:50%;background:radial-gradient(circle at 35% 35%, rgba(167,139,250,0.9), rgba(167,139,250,0.2) 70%);box-shadow:0 0 35px rgba(167,139,250,0.5);"></div>'; title.textContent = 'C\'è altro da esplorare';
+      message.textContent = 'Questo pensiero ha strati profondi che meritano attenzione.';
+      advice.innerHTML = 'Alcune emozioni hanno radici profonde e richiedono più sessioni. <em>Hai fatto un passo importante solo nell\'averle riconosciute.</em>';
+    }
+    currentStep = 11; showStep(11);
+  }
+
+  function restartExercise() {
+    if (vortexRAF) { cancelAnimationFrame(vortexRAF); vortexRAF = null; }
+    document.querySelectorAll('#motherThoughtInputs input, #hiddenThoughtInputs input').forEach(i => i.value = '');
+    document.getElementById('personalityInput').value = '';
+    document.getElementById('memoryText').value = '';
+    document.querySelectorAll('.affirmation-item').forEach(a => { a.classList.remove('checked'); a.querySelector('.affirmation-check').textContent = ''; });
+    ['initialScore','finalScore'].forEach(id => { const el = document.getElementById(id); el.value = 5; updateSlider(el, id === 'initialScore' ? 'initialScoreDisplay' : 'finalScoreDisplay'); });
+    if (timerInterval) clearInterval(timerInterval);
+    selectedThought = ''; initialScore = 5; currentStep = 0;
+    showStep(0);
+  }
+
+  initProgress();
+  showStep(0);
+  document.querySelectorAll('input[type="range"]').forEach(el => el.style.setProperty('--pct', '50%'));
+</script>
+</body>
+</html>
