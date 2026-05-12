@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anima — Codice Vivente</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@200;300;400&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #05070a;
+    --text: #e8e0d4;
+    --text-dim: #6a6a6a;
+    --text-muted: #333;
+    --accent-blue: #7dd3fc;
+    --accent-warm: #f0c97a;
+    --accent-warm-dim: rgba(240,201,122,0.08);
+    --border-blue: rgba(125,211,252,0.12);
+    --border-warm: rgba(240,201,122,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── CANVAS STELLE ── */
+  #stars {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── GLOW ── */
+  .glow-bg {
+    position: fixed;
+    top: 10%; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 700px;
+    background: radial-gradient(ellipse, rgba(56,100,160,0.10) 0%, transparent 68%);
+    pointer-events: none; z-index: 0;
+  }
+  .glow-warm {
+    position: fixed;
+    top: 50%; left: 30%;
+    width: 400px; height: 400px;
+    background: radial-gradient(ellipse, rgba(240,180,80,0.04) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    padding: 1.4rem 2.2rem;
+    z-index: 100;
+    display: flex; align-items: center; gap: 0.6rem;
+    background: linear-gradient(to bottom, rgba(5,7,10,0.7) 0%, transparent 100%);
+  }
+  nav a {
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    opacity: 0.75;
+    transition: opacity 0.2s;
+  }
+  nav a:hover { opacity: 1; }
+  nav .sep { color: #2a2a2a; font-size: 0.75rem; }
+  nav .current { color: #444; font-size: 0.75rem; letter-spacing: 0.06em; }
+
+  /* ── MAIN ── */
+  main {
+    position: relative; z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 8rem 2rem 6rem;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    margin-bottom: 5rem;
+    animation: fadeUp 1s ease both;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+    opacity: 0.55;
+    margin-bottom: 1.4rem;
+    font-weight: 300;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.2rem, 7vw, 5rem);
+    font-weight: 300;
+    color: #f0ece4;
+    line-height: 1.0;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent-warm);
+    font-weight: 300;
+  }
+
+  .hero-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, transparent, rgba(125,211,252,0.3), transparent);
+    margin: 2rem auto;
+  }
+
+  .hero p {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    max-width: 420px;
+    margin: 0 auto;
+    line-height: 1.9;
+    font-weight: 300;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+  }
+
+  /* ── CARDS ── */
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .card {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    padding: 2.8rem 3rem;
+    border: 0.5px solid var(--border-blue);
+    background: rgba(255,255,255,0.018);
+    transition: background 0.4s, border-color 0.4s;
+    overflow: hidden;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .card:nth-child(1) { animation-delay: 0.15s; border-radius: 2px 2px 0 0; }
+  .card:nth-child(2) { animation-delay: 0.28s; border-top: none; }
+  .card:nth-child(3) { animation-delay: 0.41s; border-top: none; border-radius: 0 0 2px 2px; }
+
+  .card.warm {
+    border-color: var(--border-warm);
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 0% 50%, rgba(125,211,252,0.04) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .card.warm::after {
+    background: radial-gradient(ellipse at 0% 50%, rgba(240,201,122,0.05) 0%, transparent 55%);
+  }
+
+  .card:hover {
+    background: rgba(255,255,255,0.032);
+    border-color: rgba(125,211,252,0.22);
+  }
+  .card.warm:hover {
+    border-color: rgba(240,201,122,0.22);
+  }
+  .card:hover::after { opacity: 1; }
+
+  .card-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 2rem;
+    position: relative; z-index: 1;
+  }
+
+  .card-tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+    opacity: 0.55;
+    margin-bottom: 1rem;
+    font-weight: 300;
+  }
+  .card.warm .card-tag { color: var(--accent-warm); }
+
+  .card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    font-weight: 400;
+    color: #f0ece4;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    letter-spacing: 0.01em;
+  }
+
+  .card h2 em {
+    font-style: italic;
+    color: var(--accent-warm);
+  }
+
+  .card p {
+    font-size: 0.84rem;
+    color: var(--text-dim);
+    line-height: 1.85;
+    font-weight: 300;
+    max-width: 520px;
+  }
+
+  .card-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.8rem;
+    padding-top: 0.3rem;
+  }
+
+  .card-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    transition: color 0.4s;
+  }
+  .card:hover .card-num { color: rgba(255,255,255,0.06); }
+
+  .card-arrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--accent-blue);
+    opacity: 0.4;
+    transition: opacity 0.3s, letter-spacing 0.3s;
+    font-weight: 300;
+    white-space: nowrap;
+  }
+  .card.warm .card-arrow { color: var(--accent-warm); }
+  .card:hover .card-arrow { opacity: 0.85; letter-spacing: 0.22em; }
+
+  .badge {
+    display: inline-block;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border: 0.5px solid rgba(240,201,122,0.35);
+    color: var(--accent-warm);
+    padding: 0.25rem 0.65rem;
+    border-radius: 1px;
+    margin-top: 1rem;
+    font-weight: 300;
+    opacity: 0.7;
+  }
+
+  .locations {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .location-pill {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    color: var(--accent-blue);
+    opacity: 0.55;
+    border: 0.5px solid rgba(125,211,252,0.18);
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-weight: 300;
+  }
+
+  /* ── NOTA IN FONDO ── */
+  .footer-note {
+    margin-top: 4rem;
+    text-align: center;
+    animation: fadeUp 0.8s ease 0.5s both;
+  }
+
+  .footer-note p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.8;
+    max-width: 400px;
+    margin: 0 auto 0.5rem;
+  }
+
+  .footer-note a {
+    font-size: 0.72rem;
+    color: var(--accent-blue);
+    text-decoration: none;
+    letter-spacing: 0.12em;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  .footer-note a:hover { opacity: 0.9; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 2.5rem 2rem;
+    font-size: 0.7rem;
+    color: #222;
+    letter-spacing: 0.12em;
+    font-weight: 300;
+  }
+
+  /* ── ANIMAZIONI ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    main { padding: 7rem 1.4rem 4rem; }
+    .card { padding: 2rem 1.6rem; }
+    .card-inner { grid-template-columns: 1fr; }
+    .card-meta { flex-direction: row; align-items: center; }
+    .card-num { font-size: 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<div class="glow-bg"></div>
+<div class="glow-warm"></div>
+
+<nav>
+  <a href="index.html">← Codice Vivente</a>
+  <span class="sep">/</span>
+  <span class="current">Anima</span>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Sezione</div>
+    <h1>Anima</h1>
+    <div class="hero-line"></div>
+    <p>Il percorso trasmesso da Ich-El — dalla parola scritta al video, dagli incontri collettivi alla pratica avanzata.</p>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards">
+
+    <!-- Card 1: Video Corso -->
+    <a href="anima-corso.html" class="card warm">
+      <div class="card-inner">
+        <div class="card-body">
+          <div class="card-tag">Video corso</div>
+          <h2><em>La Legge della Rinascita</em><br>in video</h2>
+          <p>Le parole di Ich-El prendono forma in video. Tre fasi di evoluzione — dalla quiete della mente alla connessione con l'anima, fino all'unione con la fonte primordiale — per chi vuole applicare il percorso con la guida diretta della voce che ha dettato il libro.</p>
+          <div class="badge">Prossimamente · accesso a pagamento</div>
+        </div>
+        <div class="card-meta">
+          <div class="card-num">01</div>
+          <div class="card-arrow">Scopri →</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Card 2: Videoconferenze -->
+    <a href="anima-videoconferenze.html" class="card">
+      <div class="card-inner">
+        <div class="card-body">
+          <div class="card-tag">Incontri collettivi</div>
+          <h2>Videoconferenze<br>& Serate con Ich-El</h2>
+          <p>Incontri in presenza dove Sara canalizza Ich-El in diretta davanti al gruppo. Non una lezione — un'esperienza viva, imprevedibile, dove ogni domanda riceve una risposta che appartiene a chi la pone. Ogni serata è unica e non si ripete.</p>
+          <div class="locations">
+            <span class="location-pill">📍 Loano (SV)</span>
+            <span class="location-pill">📍 Milano</span>
+          </div>
+        </div>
+        <div class="card-meta">
+          <div class="card-num">02</div>
+          <div class="card-arrow">Scopri →</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Card 3: Accademia -->
+    <a href="anima-accademia.html" class="card">
+      <div class="card-inner">
+        <div class="card-body">
+          <div class="card-tag">Percorso avanzato</div>
+          <h2>Accademia<br><em>La Legge della Rinascita</em></h2>
+          <p>Per chi ha completato il percorso base e sente il richiamo di andare oltre. Gli esercizi dell'Accademia — dettati da Ich-El e raccolti nel libro — continuano ad evolversi in nuovi livelli di pratica: colori, emozioni, Ego, radice, osservazione del gene. Un cammino in continuo aggiornamento, perché l'evoluzione non si ferma.</p>
+        </div>
+        <div class="card-meta">
+          <div class="card-num">03</div>
+          <div class="card-arrow">Scopri →</div>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- NOTA -->
+  <div class="footer-note">
+    <p>Per informazioni sugli incontri o per essere avvisata delle prossime date</p>
+    <a href="mailto:sara.autunnale@gmail.com">sara.autunnale@gmail.com</a>
+  </div>
+
+</main>
+
+<footer>codicevivente.com</footer>
+
+<script>
+  // ── STELLE ──
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function init() {
+    resize();
+    stars = [];
+    for (let i = 0; i < 180; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 0.85 + 0.15,
+        speed: Math.random() * 0.004 + 0.001,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      const o = 0.15 + 0.5 * (0.5 + 0.5 * Math.sin(t * s.speed * 1000 + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${o})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  init();
+  requestAnimationFrame(t => draw(t / 1000));
+  window.addEventListener('resize', init);
+</script>
+</body>
+</html>
