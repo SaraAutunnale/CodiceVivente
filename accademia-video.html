@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Il Percorso · Accademia Ich-El</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script data-goatcounter="https://codicevivente.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #05070a; --panel: rgba(255,255,255,0.04); --line: rgba(255,255,255,0.12);
+      --accent: #7dd3fc; --accent-dim: rgba(125,211,252,0.1); --text: #f4f1ea; --dim: rgba(244,241,234,0.45);
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; min-height: 100vh; overflow-x: hidden; }
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star { position: absolute; width: 1.5px; height: 1.5px; background: #fff; border-radius: 50%; animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s); opacity: var(--op, 0.4); }
+    @keyframes twinkle { 0%, 100% { opacity: var(--op, 0.4); } 50% { opacity: 0.05; } }
+    .glow { position: fixed; top: -20vh; left: 50%; transform: translateX(-50%); width: 70vw; height: 60vh; background: radial-gradient(ellipse, rgba(125,211,252,0.06) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 32px; display: flex; align-items: center; gap: 12px; background: linear-gradient(to bottom, rgba(5,7,10,0.9), transparent); }
+    nav a { color: var(--dim); text-decoration: none; font-size: 13px; letter-spacing: 0.05em; transition: color 0.3s; }
+    nav a:hover { color: var(--accent); }
+    nav span { color: var(--line); font-size: 13px; }
+    main { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 0 24px; padding-top: 120px; padding-bottom: 80px; }
+    .section-label { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+    h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 5vw, 56px); font-weight: 300; line-height: 1.15; margin-bottom: 48px; }
+    h1 em { font-style: italic; color: var(--accent); }
+
+    /* INTRO BOX */
+    .intro-box {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 24px; padding: 40px; margin-bottom: 64px;
+      backdrop-filter: blur(15px); position: relative; overflow: hidden;
+    }
+    .intro-box::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.4;
+    }
+    .intro-box p { font-size: 16px; line-height: 1.9; color: var(--dim); margin-bottom: 20px; }
+    .intro-box p:last-child { margin-bottom: 0; }
+    .intro-box p.highlight { color: var(--text); font-family: 'Cormorant Garamond', serif; font-size: 19px; font-style: italic; }
+
+    /* VIDEO LIST */
+    .video-list { display: grid; gap: 48px; }
+
+    .video-item { }
+
+    .video-header {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 16px;
+    }
+    .video-num {
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); min-width: 60px;
+    }
+    .video-divider { flex: 1; height: 1px; background: var(--line); }
+
+    .video-link { display: block; text-decoration: none; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); transition: border-color 0.3s, transform 0.3s; }
+    .video-link:hover { border-color: rgba(125,211,252,0.4); transform: translateY(-3px); }
+    .video-thumb { position: relative; width: 100%; aspect-ratio: 16/9; background: rgba(0,0,0,0.3); }
+    .video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.8; transition: opacity 0.3s; }
+    .video-link:hover .video-thumb img { opacity: 1; }
+    .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 56px; height: 56px; background: rgba(125,211,252,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.3s, transform 0.3s; }
+    .video-link:hover .play-btn { background: #fff; transform: translate(-50%, -50%) scale(1.1); }
+    .play-btn svg { width: 20px; height: 20px; fill: #05070a; margin-left: 3px; }
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    footer { border-top: 1px solid var(--line); padding: 48px 24px; text-align: center; position: relative; z-index: 1; margin-top: 80px; }
+    footer p { font-size: 13px; color: var(--dim); line-height: 1.8; }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; gap: 8px; }
+      nav a, nav span { font-size: 11px; }
+      .livello-card { padding: 24px; }
+      .intro-box { padding: 24px; }
+      .hero-cta { flex-direction: column; }
+      .btn { text-align: center; }
+      .submit-area { flex-direction: column; align-items: flex-start; }
+      h2 { font-size: clamp(28px, 8vw, 42px); }
+      section { padding: 60px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="glow"></div>
+
+  <nav>
+    <a href="index.html">← Codice Vivente</a>
+    <span>/</span>
+    <a href="anima-accademia.html">Accademia</a>
+    <span>/</span>
+    <a href="accademia-percorso.html">Il Percorso</a>
+    <span>/</span>
+    <a style="color: var(--text); cursor: default;">Video</a>
+  </nav>
+
+  <main>
+    <p class="section-label">Primo Livello</p>
+    <h1>Venti video.<br/>Un mese <em>ciascuno</em>.</h1>
+
+    <div class="intro-box reveal">
+      <p class="highlight">Questi video non si guardano — si vivono.</p>
+      <p>Ogni esercizio libera un'energia proporzionale al lavoro che ci metti. Non alla tua intelligenza, non alla tua spiritualità — alla tua diligenza. Quante volte lo applichi. Su quante situazioni reali, pensieri, emozioni, problemi della tua vita quotidiana.</p>
+      <p>Più lavori con un esercizio — su tutto quello che ti capita, non solo sui grandi temi — più l'energia circola. E man mano che circola, la pressione emotiva di quello che stai affrontando si ridimensiona. Non sparisce — cambia peso.</p>
+      <p>Chi fa l'esercizio una volta e aspetta che succeda qualcosa, otterrà qualcosa. Poco, proporzionato a quanto ha messo. Chi lo porta nella vita di tutti i giorni — su ogni pensiero che pesa, ogni emozione che torna, ogni situazione che si ripete — inizia a sentire una differenza reale.</p>
+      <p>Per questo non si salta. Non perché sia una regola — ma perché saltare significa perdere l'energia che si sarebbe mossa. Il tempo giusto non è un mese di calendario. È il tempo che ci vuole perché senti che qualcosa si è davvero spostato.</p>
+    </div>
+
+    <div class="video-list">
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 01</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=Ud6aTl-VXjI" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/Ud6aTl-VXjI/mqdefault.jpg" alt="Video 01" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 02</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=Nxym8l_5JBM" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/Nxym8l_5JBM/mqdefault.jpg" alt="Video 02" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 03</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=1vsSGt_tGLs" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/1vsSGt_tGLs/mqdefault.jpg" alt="Video 03" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 04</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=gKnYpwGrT0E" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/gKnYpwGrT0E/mqdefault.jpg" alt="Video 04" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 05</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=3sR5b2vv1zE" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/3sR5b2vv1zE/mqdefault.jpg" alt="Video 05" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 06</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=ILcEgHgZ3_Q" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/ILcEgHgZ3_Q/mqdefault.jpg" alt="Video 06" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 07</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=e2J0JfQU6-U" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/e2J0JfQU6-U/mqdefault.jpg" alt="Video 07" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 08</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=6Xiq_w0G_ms" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/6Xiq_w0G_ms/mqdefault.jpg" alt="Video 08" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 09</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=YdLFbju_O7o" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/YdLFbju_O7o/mqdefault.jpg" alt="Video 09" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 10</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=UdBAs-kLX3Q" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/UdBAs-kLX3Q/mqdefault.jpg" alt="Video 10" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 11</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=5cId-Eh7N54" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/5cId-Eh7N54/mqdefault.jpg" alt="Video 11" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 12</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=NqEJvhT0P4o" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/NqEJvhT0P4o/mqdefault.jpg" alt="Video 12" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 13</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=M0OkP5WL4rs" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/M0OkP5WL4rs/mqdefault.jpg" alt="Video 13" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 14</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=29h1Ql2H0Lc" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/29h1Ql2H0Lc/mqdefault.jpg" alt="Video 14" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 15</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=P9FBs7MgHvo" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/P9FBs7MgHvo/mqdefault.jpg" alt="Video 15" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 16</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=Qq-fWSOCBUo" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/Qq-fWSOCBUo/mqdefault.jpg" alt="Video 16" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 17</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=DKkoSzHDFgQ" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/DKkoSzHDFgQ/mqdefault.jpg" alt="Video 17" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 18</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=VTM5DCGQ-HE" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/VTM5DCGQ-HE/mqdefault.jpg" alt="Video 18" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 19</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=XpwMUsHFtu8" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/XpwMUsHFtu8/mqdefault.jpg" alt="Video 19" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="video-item reveal">
+        <div class="video-header"><span class="video-num">Video 20</span><div class="video-divider"></div></div>
+        <a href="https://www.youtube.com/watch?v=jT33sHRKS9c" target="_blank" class="video-link">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/jT33sHRKS9c/mqdefault.jpg" alt="Video 20" loading="lazy" />
+            <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg></div>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>Sara Autunnale · <a href="mailto:sara.autunnale@gmail.com">sara.autunnale@gmail.com</a></p>
+    <p style="margin-top: 8px;">Accademia Ich-El · La Legge della Rinascita</p>
+  </footer>
+
+  <script>
+    const s = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const el = document.createElement('div'); el.className = 'star';
+      el.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s;--op:${0.2+Math.random()*0.5};`;
+      s.appendChild(el);
+    }
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+  </script>
+</body>
+</html>

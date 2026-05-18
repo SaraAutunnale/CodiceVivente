@@ -37,6 +37,18 @@
     footer { border-top: 1px solid var(--line); padding: 48px 24px; text-align: center; position: relative; z-index: 1; }
     footer p { font-size: 13px; color: var(--dim); line-height: 1.8; }
     footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; gap: 8px; }
+      nav a, nav span { font-size: 11px; }
+      .livello-card { padding: 24px; }
+      .intro-box { padding: 24px; }
+      .hero-cta { flex-direction: column; }
+      .btn { text-align: center; }
+      .submit-area { flex-direction: column; align-items: flex-start; }
+      h2 { font-size: clamp(28px, 8vw, 42px); }
+      section { padding: 60px 0; }
+    }
   </style>
 </head>
 <body>
