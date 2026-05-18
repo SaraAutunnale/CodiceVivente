@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accademia Ich-El · La Legge della Rinascita</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script data-goatcounter="https://codicevivente.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #05070a; --panel: rgba(255,255,255,0.04); --line: rgba(255,255,255,0.12);
+      --accent: #7dd3fc; --accent-dim: rgba(125,211,252,0.1); --text: #f4f1ea; --dim: rgba(244,241,234,0.45);
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; min-height: 100vh; overflow-x: hidden; }
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star { position: absolute; width: 1.5px; height: 1.5px; background: #fff; border-radius: 50%; animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s); opacity: var(--op, 0.4); }
+    @keyframes twinkle { 0%, 100% { opacity: var(--op, 0.4); } 50% { opacity: 0.05; } }
+    .glow { position: fixed; top: -20vh; left: 50%; transform: translateX(-50%); width: 70vw; height: 60vh; background: radial-gradient(ellipse, rgba(125,211,252,0.06) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 32px; display: flex; align-items: center; gap: 12px; background: linear-gradient(to bottom, rgba(5,7,10,0.9), transparent); }
+    nav a { color: var(--dim); text-decoration: none; font-size: 13px; letter-spacing: 0.05em; transition: color 0.3s; }
+    nav a:hover { color: var(--accent); }
+    nav span { color: var(--line); font-size: 13px; }
+    main { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 0 24px; }
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 80px; padding-bottom: 60px; }
+    .eyebrow { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s; }
+    h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(42px, 7vw, 80px); font-weight: 300; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 32px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.4s; }
+    h1 em { font-style: italic; color: var(--accent); }
+    .hero-text { font-size: 17px; line-height: 1.8; color: var(--dim); max-width: 580px; opacity: 0; animation: fadeUp 0.8s ease forwards 0.6s; }
+    .hero-cta { margin-top: 48px; display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s ease forwards 0.8s; }
+    .btn { display: inline-block; padding: 14px 32px; border-radius: 100px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: all 0.3s; cursor: pointer; border: none; font-family: 'Inter', sans-serif; font-weight: 400; }
+    .btn-primary { background: var(--accent); color: #05070a; }
+    .btn-primary:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(125,211,252,0.3); }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    footer { border-top: 1px solid var(--line); padding: 48px 24px; text-align: center; position: relative; z-index: 1; }
+    footer p { font-size: 13px; color: var(--dim); line-height: 1.8; }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="glow"></div>
+  <nav>
+    <a href="index.html">← Codice Vivente</a>
+    <span>/</span>
+    <a href="anima.html">Anima</a>
+    <span>/</span>
+    <a style="color: var(--text); cursor: default;">Accademia</a>
+  </nav>
+  <main>
+    <div class="hero">
+      <p class="eyebrow">Accademia Ich-El</p>
+      <h1>La Legge<br/>della <em>Rinascita</em></h1>
+      <p class="hero-text">Un percorso per chi sente già che c'è qualcosa di più. Non un corso di tecniche — un cammino di trasformazione reale, costruito esercizio dopo esercizio, nella propria vita quotidiana.</p>
+      <div class="hero-cta">
+        <a href="accademia-percorso.html" class="btn btn-primary">Inizia — è gratuito</a>
+        <a href="accademia-secondo-livello.html" class="btn btn-ghost">Secondo Livello</a>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <p>Sara Autunnale · <a href="mailto:sara.autunnale@gmail.com">sara.autunnale@gmail.com</a></p>
+    <p style="margin-top: 8px;">Accademia Ich-El · La Legge della Rinascita</p>
+  </footer>
+  <script>
+    const s = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const el = document.createElement('div'); el.className = 'star';
+      el.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s;--op:${0.2+Math.random()*0.5};`;
+      s.appendChild(el);
+    }
+  </script>
+</body>
+</html>

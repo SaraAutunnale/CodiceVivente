@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secondo Livello · Accademia Ich-El</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script data-goatcounter="https://codicevivente.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #05070a; --panel: rgba(255,255,255,0.04); --line: rgba(255,255,255,0.12);
+      --accent: #7dd3fc; --accent-dim: rgba(125,211,252,0.1); --text: #f4f1ea; --dim: rgba(244,241,234,0.45);
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; min-height: 100vh; overflow-x: hidden; }
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star { position: absolute; width: 1.5px; height: 1.5px; background: #fff; border-radius: 50%; animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s); opacity: var(--op, 0.4); }
+    @keyframes twinkle { 0%, 100% { opacity: var(--op, 0.4); } 50% { opacity: 0.05; } }
+    .glow { position: fixed; top: -20vh; left: 50%; transform: translateX(-50%); width: 70vw; height: 60vh; background: radial-gradient(ellipse, rgba(125,211,252,0.06) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 32px; display: flex; align-items: center; gap: 12px; background: linear-gradient(to bottom, rgba(5,7,10,0.9), transparent); }
+    nav a { color: var(--dim); text-decoration: none; font-size: 13px; letter-spacing: 0.05em; transition: color 0.3s; }
+    nav a:hover { color: var(--accent); }
+    nav span { color: var(--line); font-size: 13px; }
+    main { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 0 24px; padding-top: 120px; }
+    section { padding: 80px 0; border-top: 1px solid var(--line); }
+    section:first-child { border-top: none; padding-top: 0; }
+    .section-label { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+    h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 300; line-height: 1.15; margin-bottom: 24px; }
+    h2 em { font-style: italic; color: var(--accent); }
+    .body-text { font-size: 16px; line-height: 1.85; color: var(--dim); margin-bottom: 20px; }
+    .intro-box { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 40px; margin-bottom: 40px; backdrop-filter: blur(15px); }
+    .intro-box p { font-size: 16px; line-height: 1.85; color: var(--dim); margin-bottom: 16px; }
+    .intro-box p:last-child { margin-bottom: 0; }
+    .intro-box strong { color: var(--text); font-weight: 400; }
+    .domanda { margin-bottom: 40px; }
+    .domanda-num { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .domanda-testo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; line-height: 1.65; color: var(--text); margin-bottom: 16px; }
+    textarea { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 16px; padding: 20px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 300; line-height: 1.7; resize: vertical; min-height: 120px; transition: border-color 0.3s; outline: none; }
+    textarea::placeholder { color: rgba(244,241,234,0.2); }
+    textarea:focus { border-color: rgba(125,211,252,0.4); background: rgba(125,211,252,0.03); }
+    .divider-domanda { height: 1px; background: var(--line); margin: 40px 0; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    input[type="text"], input[type="email"] { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 300; outline: none; transition: border-color 0.3s; }
+    input::placeholder { color: rgba(244,241,234,0.2); }
+    input:focus { border-color: rgba(125,211,252,0.4); background: rgba(125,211,252,0.03); }
+    .submit-area { margin-top: 32px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .submit-note { font-size: 13px; color: var(--dim); line-height: 1.6; }
+    .btn { display: inline-block; padding: 14px 32px; border-radius: 100px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: all 0.3s; cursor: pointer; border: none; font-family: 'Inter', sans-serif; font-weight: 400; }
+    .btn-primary { background: var(--accent); color: #05070a; }
+    .btn-primary:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(125,211,252,0.3); }
+    .form-success { display: none; background: rgba(125,211,252,0.08); border: 1px solid rgba(125,211,252,0.25); border-radius: 16px; padding: 32px; text-align: center; }
+    .form-success p { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; color: var(--text); line-height: 1.6; }
+    .form-success span { display: block; margin-top: 12px; font-size: 14px; color: var(--dim); }
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    footer { border-top: 1px solid var(--line); padding: 48px 24px; text-align: center; position: relative; z-index: 1; }
+    footer p { font-size: 13px; color: var(--dim); line-height: 1.8; }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="glow"></div>
+  <nav>
+    <a href="index.html">← Codice Vivente</a>
+    <span>/</span>
+    <a href="anima-accademia.html">Accademia</a>
+    <span>/</span>
+    <a style="color: var(--text); cursor: default;">Secondo Livello</a>
+  </nav>
+
+  <main>
+
+    <!-- INTRO -->
+    <section class="reveal">
+      <p class="section-label">Secondo Livello</p>
+      <h2>Il <em>Cammino</em></h2>
+      <p class="body-text">Se senti che il primo livello ha aperto qualcosa — non solo ti ha fatto stare meglio, ma ha spostato qualcosa di più profondo — puoi fare richiesta per il secondo livello.</p>
+      <p class="body-text">Il secondo livello è ancora in costruzione. Sta nascendo dal materiale vivo delle videoconferenze con il gruppo di lavoro — un processo che si sta definendo nel tempo, come tutto in questa accademia.</p>
+      <p class="body-text">Se senti il richiamo, rispondi alle cinque domande qui sotto. Le leggerò personalmente e, se sento che è il momento, ti contatterò per una videochiamata. Da lì capiremo insieme come proseguire.</p>
+    </section>
+
+    <!-- QUESTIONARIO -->
+    <section class="reveal">
+      <p class="section-label">Cinque domande</p>
+      <h2>Un momento di <em>verità</em></h2>
+
+      <div class="intro-box">
+        <p>Prima di rispondere, leggile tutte.</p>
+        <p>Queste non sono domande a cui rispondere in modo corretto o scorretto. Non esiste una risposta giusta.</p>
+        <p>Quello che stai per fare è un momento di verità con te stesso — forse uno dei pochi in cui ti viene chiesto di guardare dentro senza filtri, senza dover apparire in un certo modo, senza dover dimostrare niente a nessuno.</p>
+        <p>Prenditi il tempo che ti serve. Non rispondere di getto. Lascia che ogni domanda ti attraversi prima di scrivere.</p>
+        <p><strong>Quello che scrivi qui non viene giudicato. Viene ascoltato.</strong></p>
+      </div>
+
+      <form id="form-accademia">
+        <div class="form-row">
+          <input type="text" name="nome" placeholder="Il tuo nome" required />
+          <input type="email" name="email" placeholder="La tua email" required />
+        </div>
+
+        <div class="divider-domanda"></div>
+
+        <div class="domanda">
+          <p class="domanda-num">Domanda 01</p>
+          <p class="domanda-testo">C'è qualcuno nella tua vita — o nella storia — che hai giudicato profondamente sbagliato, malvagio, ingiusto? Riesci a immaginare da dove viene quel dolore che lo ha portato lì — e quale percorso, secondo te, dovrebbe fare quell'anima per tirare fuori la sua versione migliore, senza l'ausilio di terzi — guru, profeti, insegnanti, psicologi?</p>
+          <textarea name="r1" placeholder="Prenditi il tempo che ti serve…" required></textarea>
+        </div>
+
+        <div class="divider-domanda"></div>
+
+        <div class="domanda">
+          <p class="domanda-num">Domanda 02</p>
+          <p class="domanda-testo">C'è qualcosa che hai fatto nella tua vita di cui ti sei vergognato o che hai faticato ad accettare? Sei riuscito a vederne la lezione — non per giustificarti, ma per comprendere cosa di positivo ne è scaturito? Se sì, raccontami come ci sei arrivato.</p>
+          <textarea name="r2" placeholder="Prenditi il tempo che ti serve…" required></textarea>
+        </div>
+
+        <div class="divider-domanda"></div>
+
+        <div class="domanda">
+          <p class="domanda-num">Domanda 03</p>
+          <p class="domanda-testo">Guardando indietro alla tua vita, riesci a vedere un filo — una direzione che si ripete, anche attraverso le crisi, le perdite, i cambiamenti? Riesci a descriverlo?</p>
+          <textarea name="r3" placeholder="Prenditi il tempo che ti serve…" required></textarea>
+        </div>
+
+        <div class="divider-domanda"></div>
+
+        <div class="domanda">
+          <p class="domanda-num">Domanda 04</p>
+          <p class="domanda-testo">Ipotizzando di essere all'ultimo giorno della tua vita, guardandoti indietro, qual è la cosa che hai fatto, conquistato, che ti rende fiero e ti permette di dirti: vado via sereno, ho compiuto quello che dovevo fare. Se tornassi in questa vita, sarebbe solo per godermela. Spiegami dettagliatamente quello che è successo.</p>
+          <textarea name="r4" placeholder="Prenditi il tempo che ti serve…" required></textarea>
+        </div>
+
+        <div class="divider-domanda"></div>
+
+        <div class="domanda">
+          <p class="domanda-num">Domanda 05</p>
+          <p class="domanda-testo">Essere ciò che sei ti ha mai costato qualcosa — un'amicizia, un'appartenenza, la comprensione di chi ami? Raccontami quella perdita — non cosa hai capito tu, ma cosa hai sentito. Per quale motivo sei arrivato a quella decisione dolorosa — cosa ti ha fatto dire basta, compiere quell'azione irreversibile che una volta compiuta non si torna più indietro.</p>
+          <textarea name="r5" placeholder="Prenditi il tempo che ti serve…" required></textarea>
+        </div>
+
+        <div class="submit-area">
+          <button type="submit" class="btn btn-primary">Invia le risposte</button>
+          <p class="submit-note">Sara leggerà personalmente ogni risposta<br/>e ti contatterà per la videochiamata.</p>
+        </div>
+      </form>
+
+      <div class="form-success" id="success">
+        <p>Le tue risposte sono arrivate.</p>
+        <span>Sara le leggerà e ti contatterà presto per fissare la videochiamata.<br/>Grazie per esserti fermato con te stesso.</span>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Sara Autunnale · <a href="mailto:sara.autunnale@gmail.com">sara.autunnale@gmail.com</a></p>
+    <p style="margin-top: 8px;">Accademia Ich-El · La Legge della Rinascita</p>
+  </footer>
+
+  <script>
+    const s = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const el = document.createElement('div'); el.className = 'star';
+      el.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s;--op:${0.2+Math.random()*0.5};`;
+      s.appendChild(el);
+    }
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+
+    document.getElementById('form-accademia').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const data = new FormData(this);
+      const nome = data.get('nome'), email = data.get('email');
+      const r1 = data.get('r1'), r2 = data.get('r2'), r3 = data.get('r3'), r4 = data.get('r4'), r5 = data.get('r5');
+      const body = `Nome: ${nome}\nEmail: ${email}\n\n--- DOMANDA 1 ---\n${r1}\n\n--- DOMANDA 2 ---\n${r2}\n\n--- DOMANDA 3 ---\n${r3}\n\n--- DOMANDA 4 ---\n${r4}\n\n--- DOMANDA 5 ---\n${r5}`;
+      window.location.href = `mailto:sara.autunnale@gmail.com?subject=Richiesta Secondo Livello — ${encodeURIComponent(nome)}&body=${encodeURIComponent(body)}`;
+      setTimeout(() => {
+        document.getElementById('form-accademia').style.display = 'none';
+        document.getElementById('success').style.display = 'block';
+      }, 800);
+    });
+  </script>
+</body>
+</html>

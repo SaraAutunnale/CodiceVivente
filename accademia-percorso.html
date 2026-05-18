@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Il Percorso · Accademia Ich-El</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script data-goatcounter="https://codicevivente.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #05070a; --panel: rgba(255,255,255,0.04); --line: rgba(255,255,255,0.12);
+      --accent: #7dd3fc; --accent-dim: rgba(125,211,252,0.1); --text: #f4f1ea; --dim: rgba(244,241,234,0.45);
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-weight: 300; min-height: 100vh; overflow-x: hidden; }
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star { position: absolute; width: 1.5px; height: 1.5px; background: #fff; border-radius: 50%; animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s); opacity: var(--op, 0.4); }
+    @keyframes twinkle { 0%, 100% { opacity: var(--op, 0.4); } 50% { opacity: 0.05; } }
+    .glow { position: fixed; top: -20vh; left: 50%; transform: translateX(-50%); width: 70vw; height: 60vh; background: radial-gradient(ellipse, rgba(125,211,252,0.06) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 32px; display: flex; align-items: center; gap: 12px; background: linear-gradient(to bottom, rgba(5,7,10,0.9), transparent); }
+    nav a { color: var(--dim); text-decoration: none; font-size: 13px; letter-spacing: 0.05em; transition: color 0.3s; }
+    nav a:hover { color: var(--accent); }
+    nav span { color: var(--line); font-size: 13px; }
+    main { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 0 24px; padding-top: 120px; }
+    .section-label { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+    h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 300; line-height: 1.15; margin-bottom: 24px; }
+    h2 em { font-style: italic; color: var(--accent); }
+    .body-text { font-size: 16px; line-height: 1.85; color: var(--dim); margin-bottom: 20px; }
+    section { padding: 80px 0; border-top: 1px solid var(--line); }
+    section:first-child { border-top: none; padding-top: 0; }
+    .livelli { display: grid; gap: 20px; margin-top: 48px; }
+    .livello-card { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 40px; backdrop-filter: blur(15px); position: relative; overflow: hidden; transition: border-color 0.3s; }
+    .livello-card:hover { border-color: rgba(125,211,252,0.3); }
+    .livello-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.4; }
+    .livello-num { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .livello-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; margin-bottom: 16px; }
+    .livello-desc { font-size: 15px; line-height: 1.8; color: var(--dim); margin-bottom: 16px; }
+    .livello-note { font-size: 13px; line-height: 1.7; color: var(--accent); font-style: italic; margin-bottom: 24px; }
+    .livello-badge { display: inline-block; padding: 6px 16px; border-radius: 100px; font-size: 12px; letter-spacing: 0.05em; }
+    .badge-free { background: rgba(125,211,252,0.15); color: var(--accent); border: 1px solid rgba(125,211,252,0.3); }
+    .badge-invite { background: rgba(255,255,255,0.06); color: var(--dim); border: 1px solid var(--line); }
+    .cta-footer { padding: 80px 0; border-top: 1px solid var(--line); display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn { display: inline-block; padding: 14px 32px; border-radius: 100px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: all 0.3s; cursor: pointer; border: none; font-family: 'Inter', sans-serif; font-weight: 400; }
+    .btn-primary { background: var(--accent); color: #05070a; }
+    .btn-primary:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(125,211,252,0.3); }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    footer { border-top: 1px solid var(--line); padding: 48px 24px; text-align: center; position: relative; z-index: 1; }
+    footer p { font-size: 13px; color: var(--dim); line-height: 1.8; }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="glow"></div>
+  <nav>
+    <a href="index.html">← Codice Vivente</a>
+    <span>/</span>
+    <a href="anima-accademia.html">Accademia</a>
+    <span>/</span>
+    <a style="color: var(--text); cursor: default;">Il Percorso</a>
+  </nav>
+
+  <main>
+
+    <!-- CHI SONO -->
+    <section class="reveal">
+      <p class="section-label">Chi sono</p>
+      <h2>Una <em>cercatrice</em></h2>
+      <p class="body-text">Sono una cercatrice, in cammino alla scoperta delle leggi invisibili che governano la mia realtà. Sento profondamente che esiste una struttura, un ordine semplice e preciso dietro tutto ciò che vedo — una matrice che, se compresa, mi permetterà di modellare la mia realtà.</p>
+      <p class="body-text">Queste regole matematiche sono come un eco che percepisco, anche se non le vedo con gli occhi. C'è una sensazione forte dentro di me, una consapevolezza che mi dice che aspettano solo di essere trovate, come una chiave che deve girare nella serratura.</p>
+      <p class="body-text">Non cerco risposte pronte, ma alleati — persone che sentano e comprendano questo stesso richiamo. Perché so che insieme possiamo fare più luce su questo mistero e, forse, trovare le risposte che stiamo cercando.</p>
+    </section>
+
+    <!-- ICH-EL -->
+    <section class="reveal">
+      <p class="section-label">L'origine</p>
+      <h2>Chi è <em>Ich-El</em></h2>
+      <p class="body-text">Dal 2016, un'energia chiamata Ich-El ha iniziato a parlarmi. Non attraverso visioni o profezie, ma con insegnamenti pratici, chiari, da mettere subito alla prova nella realtà. Non mi ha chiesto di credere. Mi ha chiesto di sperimentare.</p>
+      <p class="body-text">Così ho fatto. Ho visto la realtà rispondere. Ho capito che il mondo è molto più malleabile di quanto immaginiamo — e che la spiritualità non è un rifugio per chi vuole evadere, ma uno strumento potente per chi vuole vivere davvero, con presenza, lucidità e libertà.</p>
+    </section>
+
+    <!-- L'ACCADEMIA -->
+    <section class="reveal">
+      <p class="section-label">L'Accademia</p>
+      <h2>Un esperimento <em>collettivo</em></h2>
+      <p class="body-text">Pubblico questo materiale per condividere ciò che ho imparato, non come verità assoluta, ma come una strada che puoi percorrere anche tu, con la tua esperienza, le tue domande e il tuo spirito critico. Non sono qui per insegnarti qualcosa che non sai, ma per ricordarti quello che hai sempre saputo, dentro di te.</p>
+      <p class="body-text">Se sei pronto, possiamo esplorare insieme. Il viaggio è tuo. Io sono solo una voce lungo il cammino.</p>
+      <p class="body-text">In questa accademia, condivido non solo la mia esperienza, ma avvio un esperimento collettivo dove Ich-El invita a mettere in pratica, verificare e persino mettere in discussione questi insegnamenti, contribuendo con le proprie esperienze e intuizioni a un processo dinamico di crescita condivisa. Ich-El ci ricorda che ogni verità è in evoluzione, pronta a trasformarsi con la nostra consapevolezza.</p>
+      <p class="body-text">Questo progetto non offre certezze definitive, ma strumenti per esplorare insieme un viaggio verso una consapevolezza sempre più profonda e condivisa. Se sei pronto a sperimentare, questa accademia ti guiderà in un percorso unico e trasformativo.</p>
+    </section>
+
+    <!-- COME FUNZIONA -->
+    <section class="reveal">
+      <p class="section-label">Come funziona</p>
+      <h2>Due <em>livelli</em>,<br/>due ingressi</h2>
+      <div class="livelli">
+
+        <div class="livello-card">
+          <p class="livello-num">Primo Livello</p>
+          <h3 class="livello-title">Gli Esercizi</h3>
+          <p class="livello-desc">Venti video, dettati uno alla volta da Ich-El nel corso del tempo. Non è un corso da consumare — è un percorso da vivere. Si parte dall'inizio e si segue nell'ordine in cui è stato ricevuto.</p>
+          <p class="livello-note">Ogni esercizio richiede almeno un mese di lavoro sulla vita reale prima di passare al successivo. Non si salta, non si sceglie. È la stessa logica con cui Ich-El li ha dettati — uno alla volta, quando era il momento.</p>
+          <a href="https://www.youtube.com/watch?v=Ud6aTl-VXjI" target="_blank" class="btn btn-primary" style="margin-top: 8px;">Inizia — è gratuito</a>
+        </div>
+
+        <div class="livello-card">
+          <p class="livello-num">Secondo Livello</p>
+          <h3 class="livello-title">Il Cammino</h3>
+          <p class="livello-desc">Se senti che il primo livello ha aperto qualcosa — non solo ti ha fatto stare meglio, ma ha spostato qualcosa di più profondo — puoi fare richiesta per il secondo livello.</p>
+          <a href="accademia-secondo-livello.html" class="btn btn-primary" style="margin-top: 8px;">Secondo Livello</a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Sara Autunnale · <a href="mailto:sara.autunnale@gmail.com">sara.autunnale@gmail.com</a></p>
+    <p style="margin-top: 8px;">Accademia Ich-El · La Legge della Rinascita</p>
+  </footer>
+
+  <script>
+    const s = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const el = document.createElement('div'); el.className = 'star';
+      el.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s;--op:${0.2+Math.random()*0.5};`;
+      s.appendChild(el);
+    }
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+  </script>
+</body>
+</html>
