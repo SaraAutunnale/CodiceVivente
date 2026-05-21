@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La logica della musica — Codice Vivente</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #05070a;
+      --accent: #7dd3fc;
+      --text: #f4f1ea;
+      --dim: rgba(244,241,234,0.45);
+      --dim2: rgba(244,241,234,0.25);
+      --panel: rgba(255,255,255,0.04);
+      --panel2: rgba(255,255,255,0.07);
+      --line: rgba(255,255,255,0.12);
+      --line2: rgba(125,211,252,0.2);
+      --radius: 24px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.8;
+    }
+
+    /* ── STARS ── */
+    #stars-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .radial-glow {
+      position: fixed;
+      top: -20vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80vw;
+      height: 70vh;
+      background: radial-gradient(ellipse at center, rgba(125,211,252,0.06) 0%, transparent 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2.5rem;
+      background: rgba(5,7,10,0.75);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      text-decoration: none;
+      opacity: 0.85;
+    }
+
+    .nav-back {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-back:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 55vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 11rem 2rem 5rem;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.2s;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: 0.03em;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.4s;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      font-weight: 300;
+      color: var(--dim);
+      max-width: 620px;
+      line-height: 1.9;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.6s;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .divider-glyph {
+      color: var(--accent);
+      font-size: 1rem;
+      opacity: 0.6;
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── SECTION BLOCK ── */
+    .block {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--line);
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards;
+    }
+
+    .block:nth-child(1) { animation-delay: 0.3s; }
+    .block:nth-child(2) { animation-delay: 0.5s; }
+    .block:nth-child(3) { animation-delay: 0.7s; }
+    .block:nth-child(4) { animation-delay: 0.9s; }
+    .block:last-child { border-bottom: none; }
+
+    .block-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .block-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line2);
+      max-width: 80px;
+    }
+
+    .block-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 1.8rem;
+      letter-spacing: 0.02em;
+    }
+
+    .block-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .block-text {
+      font-size: 1rem;
+      color: var(--dim);
+      line-height: 1.9;
+      margin-bottom: 1.4rem;
+    }
+
+    .block-text:last-child { margin-bottom: 0; }
+
+    /* ── TWO COLUMN TABLE ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    .col-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.6rem 1.4rem;
+    }
+
+    .col-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.03em;
+    }
+
+    .col-card-text {
+      font-size: 0.88rem;
+      color: var(--dim);
+      line-height: 1.75;
+    }
+
+    /* ── BRAINWAVE TABLE ── */
+    .bw-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .bw-table th {
+      text-align: left;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--line2);
+      font-weight: 400;
+    }
+
+    .bw-table td {
+      padding: 1rem 1rem;
+      border-bottom: 1px solid var(--line);
+      color: var(--dim);
+      vertical-align: top;
+    }
+
+    .bw-table tr:last-child td { border-bottom: none; }
+
+    .bw-table td:first-child {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .bw-table tr:hover td {
+      background: rgba(125,211,252,0.03);
+    }
+
+    .badge-astral {
+      display: inline-block;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--line2);
+      border-radius: 20px;
+      padding: 0.15rem 0.6rem;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    /* ── STRUMENTI GRID ── */
+    .strumenti-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    .strumento-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.5rem 1.4rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .strumento-card:hover {
+      border-color: rgba(125,211,252,0.3);
+      transform: translateY(-3px);
+    }
+
+    .strumento-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+
+    .strumento-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+      letter-spacing: 0.02em;
+    }
+
+    .strumento-origin {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .strumento-desc {
+      font-size: 0.84rem;
+      color: var(--dim);
+      line-height: 1.7;
+    }
+
+    /* ── CHIUSURA ── */
+    .closing {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+      text-align: center;
+    }
+
+    .closing-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--text);
+      opacity: 0.85;
+      margin-bottom: 1.5rem;
+    }
+
+    .closing-sub {
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dim2);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.75rem;
+      color: rgba(244,241,234,0.2);
+      letter-spacing: 0.08em;
+      border-top: 1px solid var(--line);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero { padding: 8rem 1.5rem 3rem; }
+      .content { padding: 0 1.2rem; }
+      .two-col { grid-template-columns: 1fr; }
+      .bw-table { font-size: 0.82rem; }
+      .bw-table th, .bw-table td { padding: 0.7rem 0.6rem; }
+      .strumenti-grid { grid-template-columns: 1fr; }
+      .closing { padding: 3rem 1.2rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+<div class="radial-glow"></div>
+
+<nav>
+  <a class="nav-logo" href="index.html">Codice Vivente</a>
+  <a class="nav-back" href="anima.html">← Anima</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Musica per l'Anima</p>
+  <h1 class="hero-title">La logica<br>di <em>ogni suono</em></h1>
+  <p class="hero-sub">Prima di ascoltare, capire. Ogni brano nasce da una scelta precisa — una frequenza, uno stato cerebrale, uno strumento. Questa pagina spiega perché.</p>
+</section>
+
+<div class="divider"><span class="divider-glyph">✦</span></div>
+
+<div class="content">
+
+  <!-- BLOCCO 1: DUE COSE DISTINTE -->
+  <div class="block">
+    <p class="block-label">Il fondamento</p>
+    <h2 class="block-title">Frequenze Solfeggio e binaurali<br>sono <em>due cose distinte</em></h2>
+    <p class="block-text">
+      La frequenza Solfeggio — 528 Hz, 396 Hz, 963 Hz — è la nota della musica. È la tonalità su cui è costruita la composizione, la vibrazione che risuona nell'aria e nel corpo mentre si ascolta. Ogni frequenza Solfeggio ha un significato energetico proprio, radicato in tradizioni antiche e in parte confermato da ricerche moderne.
+    </p>
+    <p class="block-text">
+      Il tono binaurale è qualcosa di completamente diverso. È una frequenza che il cervello <em>genera da solo</em>, quando sente due toni leggermente diversi — uno per orecchio. La differenza tra i due toni diventa un terzo suono interno, invisibile ma reale, che porta il cervello verso uno stato specifico. Se sento 528 Hz nell'orecchio sinistro e 532 Hz nel destro, il mio cervello produce internamente 4 Hz — onde Theta, lo stato della meditazione profonda.
+    </p>
+    <p class="block-text">
+      Non c'è una corrispondenza automatica tra frequenza Solfeggio e onda cerebrale. La scelta è intenzionale: prima si decide <em>quale effetto</em> si vuole produrre nell'ascoltatore, poi si sceglie la differenza binaurale che porta a quello stato. Le due scelte si sovrappongono e si amplificano.
+    </p>
+
+    <div class="two-col">
+      <div class="col-card">
+        <p class="col-card-title">Frequenza Solfeggio</p>
+        <p class="col-card-text">La nota della musica. Vibra nell'aria, entra nel corpo attraverso le orecchie e la pelle. Ogni frequenza porta un'intenzione energetica specifica — liberazione, amore, intuizione, connessione cosmica.</p>
+      </div>
+      <div class="col-card">
+        <p class="col-card-title">Tono binaurale</p>
+        <p class="col-card-text">La differenza tra due toni, uno per orecchio. Il cervello la genera internamente come terza frequenza. Porta il cervello verso uno stato preciso — rilassamento, meditazione, sonno profondo, stati espansi.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCCO 2: STATI CEREBRALI -->
+  <div class="block">
+    <p class="block-label">Gli stati cerebrali</p>
+    <h2 class="block-title">Quale stato vuoi<br><em>indurre</em>?</h2>
+    <p class="block-text">
+      Le onde cerebrali sono la lingua del cervello. Ogni stato di coscienza — veglia attiva, rilassamento, meditazione, sonno — corrisponde a una frequenza di oscillazione misurabile. I toni binaurali usano questo meccanismo: guidano il cervello verso lo stato scelto attraverso un processo chiamato <em>brainwave entrainment</em>, ovvero sincronizzazione delle onde cerebrali.
+    </p>
+    <p class="block-text">
+      Robert Monroe, fondatore del Monroe Institute, costruì su questo principio l'intera tecnologia Hemi-Sync — il primo sistema audio progettato specificamente per indurre esperienze fuori dal corpo. I suoi protocolli originali usavano differenze binaurali tra 1 e 4 Hz per raggiungere il confine Theta-Delta, la zona stretta tra meditazione profonda e sonno dove la coscienza può separarsi dalla percezione ordinaria.
+    </p>
+
+    <table class="bw-table">
+      <thead>
+        <tr>
+          <th>Onda</th>
+          <th>Frequenza</th>
+          <th>Stato</th>
+          <th>Differenza binaurale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Delta</td>
+          <td>0,5 – 4 Hz</td>
+          <td>Sonno profondo, guarigione inconscia, rigenerazione</td>
+          <td>2 Hz</td>
+        </tr>
+        <tr>
+          <td>Theta <span class="badge-astral">⭐ astrale</span></td>
+          <td>4 – 8 Hz</td>
+          <td>Meditazione profonda, sogno lucido, accesso all'inconscio</td>
+          <td>4 – 6 Hz</td>
+        </tr>
+        <tr>
+          <td>Alpha</td>
+          <td>8 – 12 Hz</td>
+          <td>Rilassamento consapevole, creatività, apertura emotiva</td>
+          <td>10 Hz</td>
+        </tr>
+        <tr>
+          <td>Beta</td>
+          <td>12 – 30 Hz</td>
+          <td>Focus, concentrazione, chiarezza mentale</td>
+          <td>16 Hz</td>
+        </tr>
+        <tr>
+          <td>Gamma <span class="badge-astral">⭐ astrale</span></td>
+          <td>30 – 100 Hz</td>
+          <td>Insight, stati di coscienza espansa, unità</td>
+          <td>40 Hz</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="block-text" style="margin-top:1.4rem; font-size:0.85rem;">
+      ⭐ Le frequenze Theta-Delta (3–4 Hz) e Gamma (40 Hz) sono quelle documentate dal Monroe Institute come più propense a stati alterati di coscienza e percezione espansa. Ogni brano della raccolta riporta il proprio abbinamento binaurale.
+    </p>
+  </div>
+
+  <!-- BLOCCO 3: STRUMENTI -->
+  <div class="block">
+    <p class="block-label">Gli strumenti del mondo</p>
+    <h2 class="block-title">Quarantamila anni<br>di <em>saggezza sonora</em></h2>
+    <p class="block-text">
+      Ogni strumento scelto per questa raccolta porta con sé una storia. Non sono scelte estetiche — sono scelte energetiche. Ogni cultura ha sviluppato, in modo indipendente, strumenti capaci di spostare la coscienza verso stati specifici. La ricerca moderna sta confermando con l'EEG e la misurazione del cortisolo ciò che gli sciamani, i monaci e i guaritori sapevano per esperienza diretta da millenni.
+    </p>
+    <p class="block-text">
+      La scelta degli strumenti per ogni brano segue la stessa logica delle frequenze: prima il significato energetico della frequenza Solfeggio, poi lo stato cerebrale desiderato, infine gli strumenti della tradizione mondiale che vibrano con quella stessa intenzione.
+    </p>
+
+    <div class="strumenti-grid">
+
+      <div class="strumento-card">
+        <span class="strumento-icon">〰</span>
+        <p class="strumento-name">Didgeridoo</p>
+        <p class="strumento-origin">Australia aborigena · 40.000 anni</p>
+        <p class="strumento-desc">Frequenze profonde e continue. Induce stati di trance, rimuove blocchi energetici, guarisce il corpo fisico. Studi moderni: riduce l'apnea notturna.</p>
+      </div>
+
+      <div class="strumento-card">
+        <span class="strumento-icon">◎</span>
+        <p class="strumento-name">Ciotole tibetane</p>
+        <p class="strumento-origin">Himalaya · 6.000 anni</p>
+        <p class="strumento-desc">Armonici complessi e sovrapposti. Riducono il cortisolo, bilanciano i due emisferi cerebrali, portano il cervello da Beta ad Alpha e Theta.</p>
+      </div>
+
+      <div class="strumento-card">
+        <span class="strumento-icon">◉</span>
+        <p class="strumento-name">Ciotole di cristallo</p>
+        <p class="strumento-origin">Versione moderna in quarzo puro</p>
+        <p class="strumento-desc">Toni più alti e più puri rispetto al metallo. Effetto di pulizia energetica, allineamento dei centri energetici, chiarezza emotiva e spirituale.</p>
+      </div>
+
+      <div class="strumento-card">
+        <span class="strumento-icon">◈</span>
+        <p class="strumento-name">Tamburo sciamanico</p>
+        <p class="strumento-origin">Culture indigene globali</p>
+        <p class="strumento-desc">Ritmo costante che sincronizza i due emisferi. Genera onde Theta, induce trance e journeying. Studi EEG confermano l'aumento dell'attività Theta durante il tamburo.</p>
+      </div>
+
+      <div class="strumento-card">
+        <span class="strumento-icon">♩</span>
+        <p class="strumento-name">Flauto nativo americano</p>
+        <p class="strumento-origin">Nord America indigeno</p>
+        <p class="strumento-desc">Scala pentafonica. Studi universitari confermano: aumenta Theta e Alpha, riduce la frequenza cardiaca, facilita il rilascio emotivo profondo.</p>
+      </div>
+
+      <div class="strumento-card">
+        <span class="strumento-icon">))))</span>
+        <p class="strumento-name">Gong</p>
+        <p class="strumento-origin">Asia · migliaia di anni</p>
+        <p class="strumento-desc">Frequenze potenti e multistrato. Produce catarsi, rilascio di tensioni profonde, stati alterati. Il suono del gong avvolge completamente il corpo.</p>
+      </div>
+
+      <div class="strumento-card">
+        <span class="strumento-icon">♬</span>
+        <p class="strumento-name">Arpa</p>
+        <p class="strumento-origin">Egitto e Grecia · 3.000 a.C.</p>
+        <p class="strumento-desc">Usata dai medici greci per curare disturbi mentali. Frequenze medie-alte, equilibrio tra mente e cuore, serenità profonda. Uno dei più antichi strumenti terapeutici documentati.</p>
+      </div>
+
+      <div class="strumento-card">
+        <span class="strumento-icon">ॐ</span>
+        <p class="strumento-name">Sitar / Veena</p>
+        <p class="strumento-origin">India vedica</p>
+        <p class="strumento-desc">I raga indiani erano legati a momenti specifici del giorno e a stati d'animo precisi. Connessione spirituale profonda, apertura del cuore, dissoluzione dell'ego.</p>
+      </div>
+
+      <div class="strumento-card">
+        <span class="strumento-icon">𝄞</span>
+        <p class="strumento-name">Lira greca</p>
+        <p class="strumento-origin">Grecia antica</p>
+        <p class="strumento-desc">Le armonie pitagoriche erano considerate specchio della struttura matematica dell'universo. Guarigione della mente, equilibrio tra razionale e intuitivo.</p>
+      </div>
+
+      <div class="strumento-card">
+        <span class="strumento-icon">✦</span>
+        <p class="strumento-name">Campane / Tingshas</p>
+        <p class="strumento-origin">Tibet</p>
+        <p class="strumento-desc">Piccoli piatti in lega metallica. Usate per pulizia del campo energetico, focus istantaneo, chiarezza prima e dopo la meditazione.</p>
+      </div>
+
+      <div class="strumento-card">
+        <span class="strumento-icon">⌀</span>
+        <p class="strumento-name">Hang drum / Handpan</p>
+        <p class="strumento-origin">Moderno, risonanza antica</p>
+        <p class="strumento-desc">Tono simile alle ciotole tibetane ma con melodia. Induce meditazione profonda e uno stato di euforia tranquilla — gioia senza agitazione.</p>
+      </div>
+
+      <div class="strumento-card">
+        <span class="strumento-icon">~</span>
+        <p class="strumento-name">Voce / Canto armonico</p>
+        <p class="strumento-origin">Cultura globale · lo strumento più antico</p>
+        <p class="strumento-desc">Il canto dei monaci tibetani produce armonici multipli simultanei. La voce umana è l'unico strumento capace di generare frequenze che vibrano in risonanza diretta con il corpo di chi ascolta.</p>
+      </div>
+
+      <div class="strumento-card">
+        <span class="strumento-icon">♫</span>
+        <p class="strumento-name">Oud</p>
+        <p class="strumento-origin">Medio Oriente · millenni di storia</p>
+        <p class="strumento-desc">Frequenze calde e avvolgenti. Connessione emotiva profonda, malinconia sacra — quella nostalgia per qualcosa di grande che non si riesce a nominare.</p>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- fine content -->
+
+<!-- CHIUSURA -->
+<div class="closing">
+  <p class="closing-quote">
+    "Ogni brano è una combinazione precisa di frequenza, stato e strumento.<br>Non musica da ascoltare — musica da <em>attraversare</em>."
+  </p>
+  <p class="closing-sub">Codice Vivente · Sara Autunnale</p>
+</div>
+
+<footer>
+  © Codice Vivente · Sara Autunnale
+</footer>
+
+<!-- GoatCounter -->
+<script data-goatcounter="https://codicevivente.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<!-- Stars -->
+<script>
+  const canvas = document.getElementById('stars-canvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function initStars() {
+    stars = [];
+    const count = Math.floor((canvas.width * canvas.height) / 4000);
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.2 + 0.2,
+        a: Math.random(),
+        speed: Math.random() * 0.003 + 0.001,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      s.a = 0.3 + 0.5 * Math.sin(t * s.speed + s.phase);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(244,241,234,${s.a})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => { resize(); initStars(); });
+  resize();
+  initStars();
+  requestAnimationFrame(draw);
+</script>
+
+</body>
+</html>

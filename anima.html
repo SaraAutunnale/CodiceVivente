@@ -1,453 +1,391 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anima — Codice Vivente</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@200;300;400&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anima — Codice Vivente</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #05070a;
+      --accent: #7dd3fc;
+      --text: #f4f1ea;
+      --dim: rgba(244,241,234,0.45);
+      --panel: rgba(255,255,255,0.04);
+      --line: rgba(255,255,255,0.12);
+      --radius: 24px;
+    }
 
-  :root {
-    --bg: #05070a;
-    --panel: rgba(255, 255, 255, 0.04);
-    --line: rgba(255, 255, 255, 0.12);
-    --accent: #7dd3fc;
-    --accent-dim: rgba(125, 211, 252, 0.1);
-    --text: #f4f1ea;
-    --dim: rgba(244, 241, 234, 0.45);
-  }
+    html { scroll-behavior: smooth; }
 
-  html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+    /* ── STARS ── */
+    #stars-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-  /* ── CANVAS STELLE ── */
-  #stars {
-    position: fixed; inset: 0;
-    pointer-events: none; z-index: 0;
-  }
+    /* ── GLOW ── */
+    .radial-glow {
+      position: fixed;
+      top: -20vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80vw;
+      height: 70vh;
+      background: radial-gradient(ellipse at center, rgba(125,211,252,0.07) 0%, transparent 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
 
-  /* ── GLOW ── */
-  .glow-bg {
-    position: fixed;
-    top: 10%; left: 50%;
-    transform: translateX(-50%);
-    width: 700px; height: 700px;
-    background: radial-gradient(ellipse, rgba(56,100,160,0.10) 0%, transparent 68%);
-    pointer-events: none; z-index: 0;
-  }
-  .glow-warm {
-    position: fixed;
-    top: 50%; left: 30%;
-    width: 400px; height: 400px;
-    background: radial-gradient(ellipse, rgba(125,211,252,0.04) 0%, transparent 70%);
-    pointer-events: none; z-index: 0;
-  }
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 2.5rem;
+      background: rgba(5,7,10,0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    padding: 1.4rem 2.2rem;
-    z-index: 100;
-    display: flex; align-items: center; gap: 0.6rem;
-    background: linear-gradient(to bottom, rgba(5,7,10,0.7) 0%, transparent 100%);
-  }
-  nav a {
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 0.75rem;
-    font-weight: 300;
-    letter-spacing: 0.1em;
-    opacity: 0.75;
-    transition: opacity 0.2s;
-  }
-  nav a:hover { opacity: 1; }
-  nav .sep { color: var(--line); font-size: 0.75rem; }
-  nav .current { color: var(--dim); font-size: 0.75rem; letter-spacing: 0.06em; }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      text-decoration: none;
+      opacity: 0.85;
+    }
 
-  /* ── MAIN ── */
-  main {
-    position: relative; z-index: 1;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 8rem 2rem 6rem;
-  }
+    .nav-back {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-back:hover { color: var(--accent); }
 
-  /* ── HERO ── */
-  .hero {
-    text-align: center;
-    margin-bottom: 5rem;
-    animation: fadeUp 1s ease both;
-  }
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 52vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10rem 2rem 5rem;
+    }
 
-  .hero-eyebrow {
-    font-size: 0.65rem;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--accent);
-    opacity: 0.55;
-    margin-bottom: 1.4rem;
-    font-weight: 300;
-  }
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.2s;
+    }
 
-  .hero h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(3.2rem, 7vw, 5rem);
-    font-weight: 300;
-    color: var(--text);
-    line-height: 1.0;
-    letter-spacing: 0.04em;
-    margin-bottom: 0.5rem;
-  }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: 0.04em;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.4s;
+    }
 
-  .hero h1 em {
-    font-style: italic;
-    color: var(--accent);
-    font-weight: 300;
-  }
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
 
-  .hero-line {
-    width: 1px; height: 48px;
-    background: linear-gradient(to bottom, transparent, rgba(244,241,234,0.25), transparent);
-    margin: 2rem auto;
-  }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 300;
+      color: var(--dim);
+      max-width: 540px;
+      line-height: 1.75;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards 0.6s;
+    }
 
-  .hero p {
-    font-size: 0.9rem;
-    color: var(--dim);
-    max-width: 420px;
-    margin: 0 auto;
-    line-height: 1.9;
-    font-weight: 300;
-    font-style: italic;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-  }
+    /* ── GRID ── */
+    .cards-section {
+      position: relative;
+      z-index: 1;
+      padding: 2rem 2rem 6rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
 
-  /* ── CARDS ── */
-  .cards {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
 
-  .card {
-    position: relative;
-    display: block;
-    text-decoration: none;
-    padding: 2.8rem 3rem;
-    border: 1px solid var(--line);
-    background: rgba(255,255,255,0.018);
-    transition: background 0.4s, border-color 0.4s;
-    overflow: hidden;
-    animation: fadeUp 0.8s ease both;
-  }
+    /* ── CARD ── */
+    .card {
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 2.2rem 2rem 2rem;
+      backdrop-filter: blur(15px);
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.35s, transform 0.35s, box-shadow 0.35s;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards;
+      overflow: hidden;
+    }
 
-  .card:nth-child(1) { animation-delay: 0.15s; border-radius: 2px 2px 0 0; }
-  .card:nth-child(2) { animation-delay: 0.28s; border-top: none; }
-  .card:nth-child(3) { animation-delay: 0.41s; border-top: none; border-radius: 0 0 2px 2px; }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      background: radial-gradient(ellipse at 30% 20%, rgba(125,211,252,0.06) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
 
-  .card.warm {
-    border-color: var(--line);
-  }
+    .card:hover::before { opacity: 1; }
 
-  .card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 0% 50%, rgba(125,211,252,0.04) 0%, transparent 55%);
-    opacity: 0;
-    transition: opacity 0.5s;
-  }
-  .card.warm::after {
-    background: radial-gradient(ellipse at 0% 50%, rgba(125,211,252,0.05) 0%, transparent 55%);
-  }
+    .card:hover {
+      border-color: rgba(125,211,252,0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 30px rgba(125,211,252,0.06);
+    }
 
-  .card:hover {
-    background: rgba(255,255,255,0.032);
-    border-color: rgba(125,211,252,0.22);
-  }
-  .card.warm:hover {
-    border-color: rgba(125,211,252,0.22);
-  }
-  .card:hover::after { opacity: 1; }
+    /* staggered animation delays */
+    .card:nth-child(1) { animation-delay: 0.3s; }
+    .card:nth-child(2) { animation-delay: 0.45s; }
+    .card:nth-child(3) { animation-delay: 0.6s; }
+    .card:nth-child(4) { animation-delay: 0.75s; }
+    .card:nth-child(5) { animation-delay: 0.9s; }
 
-  .card-inner {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: start;
-    gap: 2rem;
-    position: relative; z-index: 1;
-  }
+    /* large card spans 2 cols on wider screens */
+    .card.featured {
+      grid-column: span 2;
+    }
+    @media (max-width: 700px) {
+      .card.featured { grid-column: span 1; }
+    }
 
-  .card-tag {
-    font-size: 0.62rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--accent);
-    opacity: 0.55;
-    margin-bottom: 1rem;
-    font-weight: 300;
-  }
-  .card.warm .card-tag { color: var(--accent); }
+    .card-icon {
+      font-size: 1.8rem;
+      line-height: 1;
+    }
 
-  .card h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.6rem, 3vw, 2.1rem);
-    font-weight: 400;
-    color: var(--text);
-    line-height: 1.15;
-    margin-bottom: 1rem;
-    letter-spacing: 0.01em;
-  }
+    .card-badge {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 0.25rem 0.75rem;
+    }
 
-  .card h2 em {
-    font-style: italic;
-    color: var(--accent);
-  }
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.65rem;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+    }
 
-  .card p {
-    font-size: 0.84rem;
-    color: var(--dim);
-    line-height: 1.85;
-    font-weight: 300;
-    max-width: 520px;
-  }
+    .card-desc {
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: var(--dim);
+      flex: 1;
+    }
 
-  .card-meta {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.8rem;
-    padding-top: 0.3rem;
-  }
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 0.5rem;
+      transition: gap 0.3s;
+    }
+    .card:hover .card-cta { gap: 0.8rem; }
+    .card-cta .arrow { transition: transform 0.3s; }
+    .card:hover .card-cta .arrow { transform: translateX(4px); }
 
-  .card-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 3.5rem;
-    font-weight: 300;
-    color: rgba(255,255,255,0.03);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    transition: color 0.4s;
-  }
-  .card:hover .card-num { color: rgba(255,255,255,0.06); }
+    /* disabled / prossimamente */
+    .card.soon {
+      cursor: default;
+      pointer-events: none;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards;
+    }
+    .card.soon:hover {
+      transform: none;
+      border-color: var(--line);
+      box-shadow: none;
+    }
+    .card.soon .card-title,
+    .card.soon .card-icon { opacity: 0.5; }
+    .card.soon .card-desc { opacity: 0.35; }
 
-  .card-arrow {
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    color: var(--accent);
-    opacity: 0.4;
-    transition: opacity 0.3s, letter-spacing 0.3s;
-    font-weight: 300;
-    white-space: nowrap;
-  }
-  .card.warm .card-arrow { color: var(--accent); }
-  .card:hover .card-arrow { opacity: 0.85; letter-spacing: 0.22em; }
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.75rem;
+      color: rgba(244,241,234,0.2);
+      letter-spacing: 0.08em;
+      border-top: 1px solid var(--line);
+    }
 
-  .badge {
-    display: inline-block;
-    font-size: 0.58rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    border: 0.5px solid rgba(125,211,252,0.25);
-    color: var(--accent);
-    padding: 0.25rem 0.65rem;
-    border-radius: 1px;
-    margin-top: 1rem;
-    font-weight: 300;
-    opacity: 0.7;
-  }
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-  .locations {
-    display: flex;
-    gap: 0.6rem;
-    margin-top: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .location-pill {
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    color: var(--accent);
-    opacity: 0.55;
-    border: 0.5px solid var(--line);
-    padding: 0.2rem 0.7rem;
-    border-radius: 20px;
-    font-weight: 300;
-  }
-
-  /* ── NOTA IN FONDO ── */
-  .footer-note {
-    margin-top: 4rem;
-    text-align: center;
-    animation: fadeUp 0.8s ease 0.5s both;
-  }
-
-  .footer-note p {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1rem;
-    color: var(--dim);
-    line-height: 1.8;
-    max-width: 400px;
-    margin: 0 auto 0.5rem;
-  }
-
-  .footer-note a {
-    font-size: 0.72rem;
-    color: var(--accent);
-    text-decoration: none;
-    letter-spacing: 0.12em;
-    opacity: 0.5;
-    transition: opacity 0.2s;
-  }
-  .footer-note a:hover { opacity: 0.9; }
-
-  /* ── FOOTER ── */
-  footer {
-    position: relative; z-index: 1;
-    text-align: center;
-    padding: 2.5rem 2rem;
-    font-size: 0.7rem;
-    color: var(--dim);
-    letter-spacing: 0.12em;
-    font-weight: 300;
-  }
-
-  /* ── ANIMAZIONI ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 600px) {
-    main { padding: 7rem 1.4rem 4rem; }
-    .card { padding: 2rem 1.6rem; }
-    .card-inner { grid-template-columns: 1fr; }
-    .card-meta { flex-direction: row; align-items: center; }
-    .card-num { font-size: 2.5rem; }
-  }
-</style>
-  <script data-goatcounter="https://codicevivente.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    /* ── MOBILE ── */
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero { padding: 8rem 1.5rem 3rem; }
+      .cards-section { padding: 1rem 1.2rem 4rem; }
+      .card { padding: 1.8rem 1.5rem 1.6rem; }
+    }
+  </style>
 </head>
 <body>
 
-<canvas id="stars"></canvas>
-<div class="glow-bg"></div>
-<div class="glow-warm"></div>
+<canvas id="stars-canvas"></canvas>
+<div class="radial-glow"></div>
 
 <nav>
-  <a href="index.html">← Codice Vivente</a>
-  <span class="sep">/</span>
-  <span class="current">Anima</span>
+  <a class="nav-logo" href="index.html">Codice Vivente</a>
+  <a class="nav-back" href="index.html">← Torna all'inizio</a>
 </nav>
 
-<main>
+<section class="hero">
+  <p class="hero-eyebrow">Sezione</p>
+  <h1 class="hero-title">L'<em>Anima</em></h1>
+  <p class="hero-sub">Un insieme di percorsi che parlano la stessa lingua — quella di chi ha già scelto di vivere con consapevolezza.</p>
+</section>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-eyebrow">Sezione</div>
-    <h1>Anima</h1>
-    <div class="hero-line"></div>
-    <p>Il percorso trasmesso da Ich-El — dalla parola scritta al video, dagli incontri collettivi alla pratica avanzata.</p>
-  </div>
+<section class="cards-section">
+  <div class="cards-grid">
 
-  <!-- CARDS -->
-  <div class="cards">
-
-    <!-- Card 1: Video Corso -->
-    <a href="anima-corso.html" class="card warm">
-      <div class="card-inner">
-        <div class="card-body">
-          <div class="card-tag">Video corso</div>
-          <h2><em>La Legge della Rinascita</em><br>in video</h2>
-          <p>Le parole di Ich-El prendono forma in video. Tre fasi di evoluzione — dalla quiete della mente alla connessione con l'anima, fino all'unione con la fonte primordiale — per chi vuole applicare il percorso con la guida diretta della voce che ha dettato il libro.</p>
-          <div class="badge">Prossimamente · accesso a pagamento</div>
-        </div>
-        <div class="card-meta">
-          <div class="card-num">01</div>
-          <div class="card-arrow">Scopri →</div>
-        </div>
-      </div>
+    <!-- ACCADEMIA — attiva, featured -->
+    <a class="card featured" href="anima-accademia.html">
+      <span class="card-icon">✦</span>
+      <h2 class="card-title">Accademia Ich‑El</h2>
+      <p class="card-desc">La Legge della Rinascita — un percorso in video per riconoscere il meccanismo che trasforma l'esperienza in coscienza. Due livelli, venti lezioni, una sola direzione.</p>
+      <span class="card-cta">Entra nel percorso <span class="arrow">→</span></span>
     </a>
 
-    <!-- Card 2: Videoconferenze -->
-    <a href="anima-videoconferenze.html" class="card">
-      <div class="card-inner">
-        <div class="card-body">
-          <div class="card-tag">Incontri collettivi</div>
-          <h2>Videoconferenze<br>& Serate con Ich-El</h2>
-          <p>Incontri in presenza dove Sara canalizza Ich-El in diretta davanti al gruppo. Non una lezione — un'esperienza viva, imprevedibile, dove ogni domanda riceve una risposta che appartiene a chi la pone. Ogni serata è unica e non si ripete.</p>
-          <div class="locations">
-            <span class="location-pill">📍 Loano (SV)</span>
-            <span class="location-pill">📍 Milano</span>
-          </div>
-        </div>
-        <div class="card-meta">
-          <div class="card-num">02</div>
-          <div class="card-arrow">Scopri →</div>
-        </div>
-      </div>
+    <!-- VIDEOCONFERENZE — attiva -->
+    <a class="card" href="anima-videoconferenze.html">
+      <span class="card-icon">◎</span>
+      <h2 class="card-title">Incontri dal vivo</h2>
+      <p class="card-desc">Videoconferenze e incontri in presenza a Loano e Milano. Un gruppo che lavora insieme, in tempo reale.</p>
+      <span class="card-cta">Scopri le date <span class="arrow">→</span></span>
     </a>
 
-    <!-- Card 3: Accademia -->
-    <a href="anima-accademia.html" class="card">
-      <div class="card-inner">
-        <div class="card-body">
-          <div class="card-tag">Percorso avanzato</div>
-          <h2>Accademia<br><em>La Legge della Rinascita</em></h2>
-          <p>Per chi ha completato il percorso base e sente il richiamo di andare oltre. Gli esercizi dell'Accademia — dettati da Ich-El e raccolti nel libro — continuano ad evolversi in nuovi livelli di pratica: colori, emozioni, Ego, radice, osservazione del gene. Un cammino in continuo aggiornamento, perché l'evoluzione non si ferma.</p>
-        </div>
-        <div class="card-meta">
-          <div class="card-num">03</div>
-          <div class="card-arrow">Scopri →</div>
-        </div>
-      </div>
-    </a>
+    <!-- MUSICA — prossimamente ma con link alla filosofia -->
+    <div class="card soon" style="pointer-events:auto; cursor:default;">
+      <span class="card-badge">Prossimamente</span>
+      <span class="card-icon">♩</span>
+      <h2 class="card-title">Musica per l'Anima</h2>
+      <p class="card-desc">Composizioni nate per accompagnare stati di coscienza espansa — da ascoltare, non da analizzare.</p>
+      <a href="anima-musica-filosofia.html" style="display:inline-flex;align-items:center;gap:0.5rem;font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-top:0.8rem;text-decoration:none;opacity:0.75;transition:opacity 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">La logica della musica →</a>
+    </div>
+
+    <!-- BLOG — prossimamente -->
+    <div class="card soon">
+      <span class="card-badge">Prossimamente</span>
+      <span class="card-icon">✎</span>
+      <h2 class="card-title">Blog</h2>
+      <p class="card-desc">Riflessioni e approfondimenti nati dalle videoconferenze del gruppo — ciò che emerge quando si lavora insieme ad alta frequenza.</p>
+    </div>
+
+    <!-- TOUR — prossimamente -->
+    <div class="card soon">
+      <span class="card-badge">Prossimamente</span>
+      <span class="card-icon">◈</span>
+      <h2 class="card-title">Tour nei luoghi del channeling</h2>
+      <p class="card-desc">Luoghi antichi — chiese, rovine, siti come Chichén Itzá. Mi fermo, chiudo gli occhi, e racconto le visioni che arrivano sulla loro storia. Poi cerco conferme.</p>
+    </div>
 
   </div>
+</section>
 
-  <!-- NOTA -->
-  <div class="footer-note">
-    <p>Per informazioni sugli incontri o per essere avvisata delle prossime date</p>
-    <a href="mailto:sara.autunnale@gmail.com">sara.autunnale@gmail.com</a>
-  </div>
+<footer>
+  © Codice Vivente · Sara Autunnale
+</footer>
 
-</main>
+<!-- GoatCounter -->
+<script data-goatcounter="https://codicevivente.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
-<footer>SARA AUTUNNALE © 2026</footer>
-
+<!-- Stars -->
 <script>
-  // ── STELLE ──
-  const canvas = document.getElementById('stars');
+  const canvas = document.getElementById('stars-canvas');
   const ctx = canvas.getContext('2d');
   let stars = [];
 
   function resize() {
-    canvas.width = window.innerWidth;
+    canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
   }
 
-  function init() {
-    resize();
+  function initStars() {
     stars = [];
-    for (let i = 0; i < 180; i++) {
+    const count = Math.floor((canvas.width * canvas.height) / 4000);
+    for (let i = 0; i < count; i++) {
       stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: Math.random() * 0.85 + 0.15,
-        speed: Math.random() * 0.004 + 0.001,
+        r: Math.random() * 1.2 + 0.2,
+        a: Math.random(),
+        speed: Math.random() * 0.003 + 0.001,
         phase: Math.random() * Math.PI * 2
       });
     }
@@ -456,18 +394,20 @@
   function draw(t) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     stars.forEach(s => {
-      const o = 0.15 + 0.5 * (0.5 + 0.5 * Math.sin(t * s.speed * 1000 + s.phase));
+      s.a = 0.3 + 0.5 * Math.sin(t * s.speed + s.phase);
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${o})`;
+      ctx.fillStyle = `rgba(244,241,234,${s.a})`;
       ctx.fill();
     });
     requestAnimationFrame(draw);
   }
 
-  init();
-  requestAnimationFrame(t => draw(t / 1000));
-  window.addEventListener('resize', init);
+  window.addEventListener('resize', () => { resize(); initStars(); });
+  resize();
+  initStars();
+  requestAnimationFrame(draw);
 </script>
+
 </body>
 </html>
