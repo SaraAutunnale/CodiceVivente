@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Il Metodo — Ricerca · Codice Vivente</title>
+  <meta name="description" content="Come nasce un'idea in questa ricerca, spiegato semplice: le fonti scientifiche vere, cosa è dimostrato e cosa no, e perché i sistemi come i chakra o la Medicina Cinese sono trattati come storia, non come cura." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://codicevivente.com/ricerca-metodo.html" />
+  <meta property="og:title" content="Il Metodo — Ricerca" />
+  <meta property="og:description" content="Come nasce un'idea in questa ricerca: le fonti, cosa è dimostrato e cosa no, e come vengono trattati i sistemi simbolico-culturali." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://codicevivente.com/ricerca-metodo.html" />
+  <meta property="og:locale" content="it_IT" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Il Metodo — Ricerca" />
+  <meta name="twitter:description" content="Le fonti vere, cosa è dimostrato e cosa no, spiegato semplice." />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Il Metodo",
+    "description": "Come nasce un'idea in questa ricerca: le fonti vere, cosa è dimostrato e cosa no, spiegato in modo semplice.",
+    "author": { "@type": "Person", "name": "Sara Autunnale", "url": "https://codicevivente.com/" },
+    "publisher": { "@type": "Person", "name": "Sara Autunnale" },
+    "datePublished": "2026-09-20",
+    "inLanguage": "it",
+    "url": "https://codicevivente.com/ricerca-metodo.html"
+  }
+  </script>
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #05070a;
+      --accent: #7dd3fc;
+      --accent-warm: #f0c97a;
+      --text: #e8e0d5;
+      --muted: #8a8a9a;
+      --panel: rgba(255,255,255,0.03);
+      --line: rgba(255,255,255,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    #stars-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+    .bg-glow {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse 60% 50% at 50% 25%, rgba(125,211,252,0.05) 0%, transparent 70%);
+    }
+
+    nav { position: fixed; top: 0; left: 0; z-index: 100; padding: 1.2rem 2rem; }
+    nav a {
+      color: var(--accent); text-decoration: none; font-size: 0.8rem;
+      letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; transition: opacity 0.3s;
+    }
+    nav a:hover { opacity: 1; }
+
+    .hero { position: relative; z-index: 1; text-align: center; padding: 8rem 2rem 2.5rem; }
+    .hero-label {
+      font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--accent); opacity: 0.5; margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 6vw, 3.6rem);
+      font-weight: 300; letter-spacing: 0.02em; color: var(--text); max-width: 780px; margin: 0 auto 1.2rem;
+      line-height: 1.15;
+    }
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic;
+      color: var(--muted); max-width: 580px; margin: 0 auto; line-height: 1.7;
+    }
+    .hero-meta {
+      margin-top: 1.6rem; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); opacity: 0.6;
+    }
+
+    .divider {
+      position: relative; z-index: 1; display: flex; align-items: center; gap: 1.5rem;
+      max-width: 600px; margin: 2rem auto 3.5rem; padding: 0 2rem; opacity: 0.25;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--accent), transparent); }
+    .divider span { font-size: 0.9rem; color: var(--accent); }
+
+    .article-shell {
+      position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 2rem 5rem;
+      display: grid; grid-template-columns: 210px 1fr; gap: 3.5rem;
+    }
+
+    .toc { position: sticky; top: 6.5rem; align-self: start; font-size: 0.8rem; line-height: 1.9; }
+    .toc-label { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); opacity: 0.5; margin-bottom: 0.9rem; }
+    .toc a {
+      display: block; color: var(--muted); text-decoration: none; padding: 0.18rem 0 0.18rem 0.8rem;
+      border-left: 2px solid var(--line); transition: color 0.3s, border-color 0.3s;
+    }
+    .toc a:hover { color: var(--accent); border-left-color: var(--accent); }
+
+    .article-body { max-width: 700px; }
+    .article-body h2 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 1.9rem;
+      color: var(--text); margin: 3.4rem 0 1.1rem; scroll-margin-top: 6rem;
+    }
+    .article-body > h2:first-child { margin-top: 0; }
+    .article-body h3 {
+      font-family: 'Cormorant Garamond', serif; font-weight: 400; font-style: italic;
+      font-size: 1.28rem; color: var(--accent-warm); margin: 1.8rem 0 0.7rem;
+    }
+    .article-body p { font-size: 1.04rem; line-height: 1.85; opacity: 0.92; margin-bottom: 1.25rem; }
+    .article-body strong { color: var(--accent-warm); font-weight: 600; }
+    .article-body ul { margin: 0 0 1.25rem 1.2rem; }
+    .article-body li { font-size: 1.01rem; line-height: 1.8; opacity: 0.9; margin-bottom: 0.55rem; }
+
+    .nota {
+      border-left: 2px solid var(--accent); background: rgba(125,211,252,0.05);
+      padding: 1.1rem 1.5rem; border-radius: 0 12px 12px 0; margin: 1.7rem 0;
+      font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 1.03rem;
+      line-height: 1.75; color: var(--muted);
+    }
+    .nota strong { color: var(--accent); font-style: normal; }
+
+    .warn {
+      border-left: 2px solid #f0a37a; background: rgba(240,163,122,0.06);
+      padding: 1.1rem 1.5rem; border-radius: 0 12px 12px 0; margin: 1.7rem 0;
+      font-size: 0.98rem; line-height: 1.8; color: var(--text); opacity: 0.95;
+    }
+    .warn strong { color: #f0a37a; }
+
+    .levels { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.1rem; margin: 1.4rem 0 2rem; }
+    .level-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 1.3rem 1.2rem; }
+    .level-card .n { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); opacity: 0.6; }
+    .level-card h4 { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 1.15rem; margin: 0.45rem 0; }
+    .level-card p { font-size: 0.86rem; opacity: 0.75; line-height: 1.6; margin: 0; }
+
+    .related {
+      max-width: 700px; margin: 4rem 0 0 auto; padding-top: 2.4rem; border-top: 1px solid var(--line);
+    }
+    .related-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); opacity: 0.5; margin-bottom: 1.2rem; }
+    .related-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+    .related-links a {
+      display: block; background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+      padding: 1.3rem 1.4rem; text-decoration: none; color: inherit; transition: all 0.35s;
+    }
+    .related-links a:hover { border-color: rgba(125,211,252,0.3); transform: translateY(-3px); }
+    .related-links .rt { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--text); margin-bottom: 0.3rem; }
+    .related-links .rd { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+    footer.page-footer { position: relative; z-index: 1; padding: 3rem; text-align: center; font-size: 0.7rem; letter-spacing: 0.15em; opacity: 0.3; }
+
+    @media (max-width: 860px) {
+      .article-shell { grid-template-columns: 1fr; }
+      .toc { position: static; margin-bottom: 2.5rem; display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; }
+      .toc-label { width: 100%; }
+      .toc a { border-left: none; padding: 0.2rem 0; }
+      .related { margin: 3rem auto 0; }
+    }
+
+  </style>
+  <script data-goatcounter="https://codicevivente.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<canvas id="stars-canvas"></canvas>
+<div class="bg-glow"></div>
+<nav><a href="ricerca.html">← Ricerca</a></nav>
+
+<section class="hero">
+  <p class="hero-label">Ricerca · Metodo</p>
+  <h1>Il Metodo</h1>
+  <p class="hero-sub">Come nasce un'idea, qui dentro. Le fonti, cosa è dimostrato e cosa no, e perché dirlo chiaramente conta più che sembrare sicuri di tutto.</p>
+  <p class="hero-meta">Sara Autunnale · ~9 min di lettura</p>
+</section>
+<div class="divider"><span>✦</span></div>
+
+<div class="article-shell">
+
+  <aside class="toc">
+    <p class="toc-label">In questo articolo</p>
+    <a href="#perche">Perché un metodo</a>
+    <a href="#quattro-scienze">Quattro modelli che convergono</a>
+    <a href="#rilevatore-fumo">Perché il corpo è così</a>
+    <a href="#simbolico">Dove finisce la scienza</a>
+    <a href="#hamer">Il caso che richiede cautela</a>
+    <a href="#livelli">I quattro livelli di attendibilità</a>
+  </aside>
+
+  <article class="article-body">
+
+    <h2 id="perche">Perché un metodo</h2>
+    <p>Un modello come quello dei <a href="ricerca-loop-epigenetici.html" style="color:var(--accent);">quattro loop epigenetici</a> mette insieme cose molto diverse tra loro: dati scientifici solidi, osservazioni fatte su tante persone nel tempo, tradizioni antiche che leggono corpo ed emozioni a modo loro, e collegamenti che ho costruito io e che nessuno ha ancora dimostrato del tutto. Dire con chiarezza cosa è cosa — cosa è un dato, cosa è un'ipotesi — non è un dettaglio da aggiungere alla fine. È la parte più importante di tutto il lavoro. Questa pagina spiega come lo faccio.</p>
+
+    <h2 id="quattro-scienze">Quattro modelli indipendenti che convergono</h2>
+    <p>Il meccanismo al centro di questa ricerca — un innesco, una reazione automatica velocissima, un attimo in cui puoi ancora decidere, poi l'azione — non me lo sono inventato io: ha già un nome, anzi quattro, in campi di studio diversi che sono arrivati, ognuno per conto suo, alla stessa identica scoperta:</p>
+    <ul>
+      <li><strong>Joseph LeDoux</strong> e la "doppia via": una strada veloce e automatica (l'amigdala), una lenta e ragionata (la corteccia) — a livello del cervello vero e proprio.</li>
+      <li><strong>Daniel Kahneman</strong> e il "Sistema 1 / Sistema 2": lo stesso identico meccanismo, ma raccontato a livello di pensiero.</li>
+      <li><strong>Hans Selye</strong> e le tre fasi dello stress: allarme, resistenza, esaurimento — a livello del corpo.</li>
+      <li><strong>Albert Ellis</strong> e il modello ABC: un fatto scatenante, un'interpretazione automatica, una conseguenza — usato in terapia.</li>
+    </ul>
+    <p>Quattro modi di fare ricerca completamente diversi, nati in epoche e discipline diverse, sono arrivati allo stesso punto: non conta bloccare l'innesco (impossibile) né inseguire la reazione quando è già partita (troppo tardi). Conta lo spazio in mezzo. Che quattro strade diverse portino tutte lì è quello che rende questo punto solido, non un'idea isolata.</p>
+
+    <h2 id="rilevatore-fumo">Perché il corpo è così</h2>
+    <p>Se serve sempre uno sforzo per "arrivare prima" dell'allarme automatico, perché il corpo è fatto in modo così scomodo? La risposta arriva dall'evoluzione, non solo dalla biologia di oggi. Pensa a un <strong>rilevatore di fumo</strong>: è tarato per suonare anche per un toast bruciato, perché il costo di un falso allarme è basso, mentre perdere un vero incendio potrebbe ucciderti. Il nostro sistema di allarme — lo ha spiegato bene lo scienziato Randolph Nesse — funziona uguale: preferisce sbagliare cento volte per eccesso di prudenza, piuttosto che rischiare anche solo una volta di ignorare un pericolo vero. Il problema è che oggi usiamo lo stesso allarme, tarato per predatori e carestie, contro pericoli moderni come un mercato che scende o il giudizio di qualcuno sui social — cose molto diverse da una minaccia fisica reale. Questo non è un difetto da correggere: sono due sistemi che convivono. Quello antico non si spegne mai del tutto. Ma uno nuovo, più aggiornato, si può costruire con la ripetizione — esercitando, poco alla volta, una risposta diversa.</p>
+
+    <h2 id="simbolico">Dove finisce la scienza e inizia la cultura simbolica</h2>
+    <p>Per capire come culture diverse abbiano letto, a modo loro, lo stesso tipo di segnale nel corpo, ho ripercorso alcune tradizioni antiche, ognuna con una storia precisa: la <strong>Medicina Tradizionale Cinese</strong>, che collega ogni organo a un'emozione (il fegato con la rabbia, il cuore con la gioia, i reni con la paura); i <strong>chakra</strong>, che vengono dall'India — un dettaglio che sorprende quasi tutti: nascono da un manuale rituale del 1500, non da una mappa psicologica. I colori e i significati che conosciamo oggi sono arrivati molto dopo e sono più recenti di quanto sembri (un pezzo nel 1919, i colori nel 1927, la versione "arcobaleno" che tutti conoscono solo nel 1977); e la <strong>teoria dei quattro umori</strong> di Ippocrate, il padre della medicina occidentale.</p>
+    <p>Tratto questi sistemi come un <strong>dato storico e culturale</strong> interessante — non come una cura alternativa alla medicina. Il bello, per me, è vedere come culture lontanissime tra loro, senza essersi mai parlate, abbiano trovato collegamenti simili tra corpo ed emozioni. Ma dirlo sempre con chiarezza — "questo è un sistema di credenze, non una diagnosi" — è ciò che separa una ricerca seria da un pastone confuso che mescola tutto senza criterio.</p>
+
+    <h2 id="hamer">Il caso che richiede una cautela esplicita</h2>
+    <div class="warn">C'è un sistema, chiamato <strong>Nuova Medicina Germanica</strong>, ideato da Ryke Geerd Hamer, che è diverso da tutti gli altri di cui parlo qui. Non è solo "non dimostrato": <strong>è documentato che ha causato morti reali</strong>, quando le persone lo hanno usato al posto delle cure oncologiche vere (il dato viene dall'AIRC, l'Associazione Italiana per la Ricerca sul Cancro). Se lo nomino, è solo per capire come nasce e si diffonde un sistema di credenze — mai come consiglio pratico. <strong>Se hai una diagnosi di tumore, o il sospetto di averla, l'unica persona da ascoltare è un medico.</strong></div>
+
+    <h2 id="livelli">I quattro livelli di attendibilità</h2>
+    <p>Questa è la scala che uso per ogni articolo di questa sezione, non solo per questo:</p>
+    <div class="levels">
+      <div class="level-card"><span class="n">Livello 1</span><h4>Dato scientifico solido</h4><p>Studi sugli animali, come funziona lo stress nel corpo, le quattro teorie scientifiche citate sopra.</p></div>
+      <div class="level-card"><span class="n">Livello 2</span><h4>Osservazione clinica consolidata</h4><p>Trauma, legami affettivi, comportamenti compulsivi, dipendenze — osservati su tante persone, ma non sempre con esperimenti veri e propri.</p></div>
+      <div class="level-card"><span class="n">Livello 3</span><h4>Sistema simbolico-culturale</h4><p>Medicina Cinese, chakra, i quattro umori — storia e cultura, mai indicazioni mediche.</p></div>
+      <div class="level-card"><span class="n">Livello 4</span><h4>Estrapolazione concettuale</h4><p>Collegamenti che ho costruito io, non ancora dimostrati — per esempio il legame diretto tra questi meccanismi e la capacità di costruire un patrimonio.</p></div>
+    </div>
+    <div class="nota">Il valore di un modello come questo sta nel fatto che si tiene insieme in modo coerente e ti aiuta a capire meglio quello che vivi — non nell'essere, oggi, una verità scientifica dimostrata al cento per cento. Dire chiaramente dove un'idea è forte e dove invece è solo un collegamento che ho fatto io fa parte del risultato. Non è un limite da nascondere.</div>
+
+  </article>
+
+</div>
+
+<div class="related" style="max-width:1080px; margin:0 auto; padding: 0 2rem;">
+  <div style="max-width:700px; margin-left:auto;">
+    <p class="related-label">Continua la lettura</p>
+    <div class="related-links">
+      <a href="ricerca-loop-epigenetici.html">
+        <div class="rt">I Quattro Loop Epigenetici</div>
+        <div class="rd">L'articolo che questo metodo sostiene: come si formano i pattern, e cosa li scioglie.</div>
+      </a>
+      <a href="ricerca.html">
+        <div class="rt">Tutta la Ricerca</div>
+        <div class="rd">Torna all'indice degli articoli.</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer class="page-footer">SARA AUTUNNALE © 2026</footer>
+
+<script>
+
+  const canvas = document.getElementById('stars-canvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  function initStars() {
+    stars = [];
+    for (let i = 0; i < 160; i++) {
+      stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+        r: Math.random()*1.1+0.2, o: Math.random()*0.5+0.1,
+        speed: Math.random()*0.3+0.1, phase: Math.random()*Math.PI*2 });
+    }
+  }
+  function drawStars(t) {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    stars.forEach(s => {
+      const op = s.o*(0.6+0.4*Math.sin(t*s.speed+s.phase));
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(255,255,255,${op})`; ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+  resize(); initStars(); requestAnimationFrame(drawStars);
+  window.addEventListener('resize', ()=>{ resize(); initStars(); });
+
+  const tocLinks = document.querySelectorAll('.toc a');
+  const sections = Array.from(tocLinks).map(a => document.querySelector(a.getAttribute('href')));
+  const tocObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const link = document.querySelector(`.toc a[href="#${entry.target.id}"]`);
+      if (!link) return;
+      if (entry.isIntersecting) {
+        tocLinks.forEach(l => l.style.color = '');
+        tocLinks.forEach(l => l.style.borderLeftColor = '');
+        link.style.color = 'var(--accent)';
+        link.style.borderLeftColor = 'var(--accent)';
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => s && tocObserver.observe(s));
+
+</script>
+</body>
+</html>
