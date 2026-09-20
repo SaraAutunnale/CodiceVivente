@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Il Set — Soul Trigger · Codice Vivente</title>
+  <meta name="description" content="Otto frequenze, un solo viaggio: la struttura completa del set live Soul Trigger di Sara Autunnale — dall'apertura in Theta al risveglio finale in 852 Hz.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://codicevivente.com/soul-trigger-set.html">
+  <meta property="og:title" content="Il Set — Soul Trigger">
+  <meta property="og:description" content="Otto frequenze, un solo viaggio. La struttura completa del set live Soul Trigger di Sara Autunnale.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://codicevivente.com/soul-trigger-set.html">
+  <meta property="og:locale" content="it_IT">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Il Set — Soul Trigger">
+  <meta name="twitter:description" content="Otto frequenze, un solo viaggio.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #05070a;
+      --accent: #7dd3fc;
+      --text: #f4f1ea;
+      --dim: rgba(244,241,234,0.45);
+      --dim2: rgba(244,241,234,0.25);
+      --panel: rgba(255,255,255,0.04);
+      --panel2: rgba(255,255,255,0.07);
+      --line: rgba(255,255,255,0.12);
+      --line2: rgba(125,211,252,0.2);
+      --radius: 24px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.8;
+    }
+
+    #stars-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+    .radial-glow {
+      position: fixed;
+      top: -20vh; left: 50%;
+      transform: translateX(-50%);
+      width: 80vw; height: 70vh;
+      background: radial-gradient(ellipse at center, rgba(125,211,252,0.06) 0%, transparent 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 2.5rem;
+      background: rgba(5,7,10,0.75);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 400;
+      letter-spacing: 0.08em; color: var(--text); text-decoration: none; opacity: 0.85;
+    }
+
+    .nav-back {
+      font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--dim); text-decoration: none; transition: color 0.3s;
+    }
+    .nav-back:hover { color: var(--accent); }
+
+    .hero {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 10rem 2rem 4rem;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 300; line-height: 1.05; letter-spacing: 0.03em; margin-bottom: 1.6rem;
+      opacity: 0; animation: fadeUp 0.9s ease forwards 0.4s;
+    }
+    .hero-title em { font-style: italic; color: var(--accent); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.15rem); font-weight: 300; color: var(--dim);
+      max-width: 560px; line-height: 1.9;
+      opacity: 0; animation: fadeUp 0.9s ease forwards 0.6s;
+    }
+
+    .divider {
+      position: relative; z-index: 1; display: flex; align-items: center; gap: 1.5rem;
+      max-width: 860px; margin: 0 auto; padding: 0 2rem;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+    .divider-glyph { color: var(--accent); font-size: 1rem; opacity: 0.6; }
+
+    .content { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 0 2rem; }
+
+    .block {
+      padding: 5rem 0; border-bottom: 1px solid var(--line);
+      opacity: 0; animation: fadeUp 0.9s ease forwards;
+    }
+    .block:nth-child(1) { animation-delay: 0.2s; }
+    .block:nth-child(2) { animation-delay: 0.3s; }
+    .block:nth-child(3) { animation-delay: 0.4s; }
+    .block:last-child { border-bottom: none; }
+
+    .block-label {
+      font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.8rem;
+    }
+    .block-label::after { content: ''; flex: 1; height: 1px; background: var(--line2); max-width: 80px; }
+
+    .block-title {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 300; line-height: 1.15; margin-bottom: 2rem; letter-spacing: 0.02em;
+    }
+    .block-title em { font-style: italic; color: var(--accent); }
+
+    .block-text { font-size: 1rem; color: var(--dim); line-height: 1.9; margin-bottom: 1.4rem; }
+    .block-text:last-child { margin-bottom: 0; }
+
+    /* ── TIMELINE DEL SET ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; margin-top: 1rem; }
+
+    .track {
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 1.8rem;
+      padding: 2.4rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .track:last-child { border-bottom: none; }
+
+    .track-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem; font-weight: 300; color: var(--accent); opacity: 0.3; line-height: 1;
+    }
+
+    .track-moment {
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); opacity: 0.7; margin-bottom: 0.5rem;
+    }
+
+    .track-freq {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 400;
+      color: var(--text); margin-bottom: 0.6rem; letter-spacing: 0.02em;
+    }
+    .track-freq .hz { color: var(--accent); font-style: italic; }
+
+    .track-action {
+      font-size: 0.95rem; color: var(--dim); line-height: 1.8; margin-bottom: 0.8rem;
+    }
+
+    .track-meta {
+      display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem;
+      font-size: 0.78rem; color: var(--dim2);
+    }
+    .track-meta span strong { color: var(--dim); font-weight: 500; }
+
+    /* ── FORMULA BANNER (riuso) ── */
+    .formula-banner {
+      background: var(--panel2); border: 1px solid var(--line2); border-radius: var(--radius);
+      padding: 2.5rem; margin-top: 2.5rem; text-align: center;
+    }
+    .formula-banner-title {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      font-weight: 300; letter-spacing: 0.05em; margin-bottom: 0.6rem;
+    }
+    .formula-banner-title em { font-style: italic; color: var(--accent); }
+    .formula-banner-sub { font-size: 0.82rem; color: var(--dim); letter-spacing: 0.1em; }
+
+    /* ── CTA ── */
+    .cta-row { display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap; }
+    .cta-btn {
+      display: inline-block; padding: 0.9rem 2rem; border: 1px solid var(--line2);
+      border-radius: 40px; font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent); text-decoration: none; transition: background 0.3s, border-color 0.3s;
+    }
+    .cta-btn:hover { background: rgba(125,211,252,0.08); border-color: var(--accent); }
+    .cta-btn.primary { background: rgba(125,211,252,0.1); border-color: var(--accent); }
+
+    /* ── CLOSING ── */
+    .closing {
+      position: relative; z-index: 1; max-width: 860px; margin: 0 auto;
+      padding: 5rem 2rem 7rem; text-align: center;
+    }
+    .closing-quote {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(1.3rem, 3vw, 2rem);
+      font-weight: 300; font-style: italic; line-height: 1.5; color: var(--text);
+      opacity: 0.85; margin-bottom: 1.5rem;
+    }
+    .closing-sub { font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim2); }
+
+    footer {
+      position: relative; z-index: 1; text-align: center; padding: 2rem;
+      font-size: 0.75rem; color: rgba(244,241,234,0.2); letter-spacing: 0.08em;
+      border-top: 1px solid var(--line);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 700px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero { padding: 8rem 1.5rem 3rem; }
+      .content { padding: 0 1.2rem; }
+      .track { grid-template-columns: 44px 1fr; gap: 1rem; }
+      .track-num { font-size: 1.8rem; }
+      .closing { padding: 3rem 1.2rem 4rem; }
+      .cta-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+<div class="radial-glow"></div>
+
+<nav>
+  <a class="nav-logo" href="index.html">Codice Vivente</a>
+  <a class="nav-back" href="soul-trigger.html">← Soul Trigger</a>
+</nav>
+
+<section class="hero">
+  <p class="hero-eyebrow">Sara Autunnale · Soul Trigger</p>
+  <h1 class="hero-title">Il <em>Set</em></h1>
+  <p class="hero-sub">Otto frequenze. Un solo viaggio. Ogni traccia è una soglia — il corpo la attraversa prima che la mente se ne accorga.</p>
+</section>
+
+<div class="divider"><span class="divider-glyph">✦</span></div>
+
+<div class="content">
+
+  <!-- BLOCCO: LA STRUTTURA -->
+  <div class="block">
+    <p class="block-label">La struttura</p>
+    <h2 class="block-title">Non otto canzoni.<br><em>Un unico arco.</em></h2>
+    <p class="block-text">
+      Il set è costruito a 115 BPM, pensato per il DJ set: ogni brano nasce per unirsi al successivo senza soluzione di continuità. Un'apertura strumentale apre il canale, la costruzione porta dentro, il corpo resta pieno del suono, poi un respiro — e si riparte. Dalla prima soglia all'ultima, è un unico arco che sale, si apre, e infine atterra.
+    </p>
+  </div>
+
+  <!-- BLOCCO: LA SEQUENZA -->
+  <div class="block">
+    <p class="block-label">Il viaggio</p>
+    <h2 class="block-title">Otto soglie,<br>una alla volta</h2>
+
+    <div class="timeline">
+
+      <div class="track">
+        <div class="track-num">01</div>
+        <div>
+          <p class="track-moment">Apertura</p>
+          <p class="track-freq">Theta <span class="hz">200 Hz</span></p>
+          <p class="track-action">Porta dentro. Apre il passaggio tra veglia e sogno — il tamburo sciamanico sincronizza il gruppo prima ancora che la danza inizi.</p>
+          <div class="track-meta"><span><strong>Voce</strong> femminile eterea, che scivola tra le note</span><span><strong>Radice</strong> tradizione sciamanica globale, il journeying</span></div>
+        </div>
+      </div>
+
+      <div class="track">
+        <div class="track-num">02</div>
+        <div>
+          <p class="track-moment">Costruzione</p>
+          <p class="track-freq">396 Hz <span class="hz">Liberation</span></p>
+          <p class="track-action">Libera. Il corpo butta fuori ciò che trattiene — catarsi danzante, il primo momento in cui il gruppo si muove insieme.</p>
+          <div class="track-meta"><span><strong>Voce</strong> potenza pulita, apertura</span><span><strong>Radice</strong> tradizione dei nativi americani, il rilascio come atto sacro</span></div>
+        </div>
+      </div>
+
+      <div class="track">
+        <div class="track-num">03</div>
+        <div>
+          <p class="track-moment">Primo picco</p>
+          <p class="track-freq">417 Hz <span class="hz">Transformation</span></p>
+          <p class="track-action">Trasforma. Rompe le strutture cristallizzate — si sente nelle ossa, prima del cuore del set.</p>
+          <div class="track-meta"><span><strong>Voce</strong> intensa, scura, ai bordi</span><span><strong>Radice</strong> tradizione tantrica indiana, la rottura come via</span></div>
+        </div>
+      </div>
+
+      <div class="track">
+        <div class="track-num">04</div>
+        <div>
+          <p class="track-moment">Cuore del set</p>
+          <p class="track-freq">528 Hz <span class="hz">Love</span></p>
+          <p class="track-action">Apre. Il cuore che danza — la frequenza più studiata delle Solfeggio, qui diventa gioia corporea pura.</p>
+          <div class="track-meta"><span><strong>Voce</strong> piena, forza del cuore aperto</span><span><strong>Radice</strong> tradizione sufi, l'amore come forza cosmica</span></div>
+        </div>
+      </div>
+
+      <div class="track">
+        <div class="track-num">05</div>
+        <div>
+          <p class="track-moment">Climax collettivo</p>
+          <p class="track-freq">639 Hz <span class="hz">Connection</span></p>
+          <p class="track-action">Connette. Il momento in cui il gruppo smette di essere una somma di persone e diventa un solo campo.</p>
+          <div class="track-meta"><span><strong>Voce</strong> calore mediterraneo, armonici multipli</span><span><strong>Radice</strong> tradizione sufi e mediorientale, il riconoscimento tra anime</span></div>
+        </div>
+      </div>
+
+      <div class="track">
+        <div class="track-num">06</div>
+        <div>
+          <p class="track-moment">Secondo picco</p>
+          <p class="track-freq">Gamma <span class="hz">200 Hz</span></p>
+          <p class="track-action">Espande. Ogni colpo di gong apre un varco — il climax del set, devastante nel senso migliore.</p>
+          <div class="track-meta"><span><strong>Voce</strong> fuori dal tempo, qualità cosmica</span><span><strong>Radice</strong> buddhismo tibetano, il canto come via alla coscienza espansa</span></div>
+        </div>
+      </div>
+
+      <div class="track">
+        <div class="track-num">07</div>
+        <div>
+          <p class="track-moment">Respiro</p>
+          <p class="track-freq">Alpha <span class="hz">210 Hz</span></p>
+          <p class="track-action">Respira. Il beat si abbassa, i corpi si riposano prima dell'ultima soglia.</p>
+          <div class="track-meta"><span><strong>Voce</strong> presenza leggera e radicata</span><span><strong>Radice</strong> tradizione taoista, il flusso come stato naturale</span></div>
+        </div>
+      </div>
+
+      <div class="track">
+        <div class="track-num">08</div>
+        <div>
+          <p class="track-moment">Chiusura</p>
+          <p class="track-freq">852 Hz <span class="hz">Awakening</span></p>
+          <p class="track-action">Risveglia. Il ritorno a se stessi dopo il viaggio — atterraggio consapevole.</p>
+          <div class="track-meta"><span><strong>Voce</strong> che supera se stessa, qualità sufi</span><span><strong>Radice</strong> buddhismo tibetano e tradizione sufi, il risveglio come ritorno</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="formula-banner">
+      <p class="formula-banner-title">Frequenza · Strumenti · Elettronica · <em>Binaurale · Voce</em></p>
+      <p class="formula-banner-sub">115 BPM · Afro House / Organic House / Tribal House</p>
+    </div>
+  </div>
+
+  <!-- BLOCCO: DOVE -->
+  <div class="block">
+    <p class="block-label">Viverlo dal vivo</p>
+    <h2 class="block-title">Il set si ascolta<br>in <em>un corpo</em>, non in cuffia</h2>
+    <p class="block-text">
+      Dal vivo, il sub bass porta la frequenza portante attraverso il petto — l'effetto è viscerale, corporeo, condiviso con tutti quelli che sono nella stanza. È pensato per uno spazio, un impianto, un gruppo — non per l'ascolto isolato.
+    </p>
+    <div class="cta-row">
+      <a href="soul-trigger.html" class="cta-btn primary">← Torna al rito</a>
+      <a href="anima-videoconferenze.html" class="cta-btn">Prossimi eventi</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="closing">
+  <p class="closing-quote">"Otto soglie. <em style="color: var(--accent)">Un solo corpo</em> che le attraversa."</p>
+  <p class="closing-sub">Sara Autunnale · Codice Vivente</p>
+</div>
+
+<footer>© Codice Vivente · Sara Autunnale</footer>
+
+<script data-goatcounter="https://codicevivente.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script>
+  const canvas = document.getElementById('stars-canvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+
+  function initStars() {
+    stars = [];
+    const count = Math.floor((canvas.width * canvas.height) / 4000);
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+        r: Math.random() * 1.2 + 0.2, a: Math.random(),
+        speed: Math.random() * 0.003 + 0.001, phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      s.a = 0.3 + 0.5 * Math.sin(t * s.speed + s.phase);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(244,241,234,${s.a})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => { resize(); initStars(); });
+  resize();
+  initStars();
+  requestAnimationFrame(draw);
+</script>
+
+</body>
+</html>

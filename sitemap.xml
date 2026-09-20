@@ -71,6 +71,16 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://codicevivente.com/soul-trigger.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://codicevivente.com/soul-trigger-set.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://codicevivente.com/sessioni-sara.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
